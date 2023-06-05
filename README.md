@@ -4,7 +4,7 @@
 
 #### Who am I?
 
-* I am an industrial automation, electrical and electronics engineer. I design systems for oil refineries, desalination plants, large solar pump stations, municipal water delivery and treatment systems. Many of the systems I have built from the ground up and I am intimately familiar with the electronics, electrical, mechanical and software development of these kinds of systems.
+* I am an industrial automation, electrical and electronics engineer. I design systems for oil refineries, desalination plants, large solar pump stations, municipal water delivery and treatment systems. Many of the systems I have built from the ground up and I am intimately familiar with the electronics, electrical design, mechanical and software development of these kinds of systems.
 * Im trying something new in attempting to make this NodeJS framework available to the public. I admit the delivery is a bit out of the ordinary but I feel good about it. Im eger to make the documentation more complete, largely directed by the questions people have about implementing it.
 
 ## Preamble 
