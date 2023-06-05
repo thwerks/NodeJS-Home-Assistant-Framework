@@ -24,7 +24,7 @@ let config = {
 lib();  // load package dependencies 
 let
     cfg = {         // add a config object here for automation function
-        dd: [       // config for the Demand/Delivery automation function
+        dd: [       // config for the Demand/Delivery automation function, 1 object for each pump system
             {   // DD system 1 example
                 name: "Tazok",          // Demand Delivery system name
                 haAuto: 0,              // home assistant auto toggle ID number (specified below in cfg.input.ha config)
@@ -103,7 +103,7 @@ let
                     })
                 });
             }
-            for (let x = 0; x < cfg.dd.length; x++) {
+            for (let x = 0; x < cfg.dd.length; x++) {   // for loop for multi object system, iterate over each object
                 let flow = undefined;
                 if (cfg.dd[x].cfgFlow != undefined) flow = state.flow[cfg.dd[x].cfgFlow];
                 let pumpHA = state.ha.input[cfg.dd[x].haPump];
@@ -310,7 +310,7 @@ let
                                                                     // create an entry for your module name in the log() function at the end of this script
                                                                     // logs to console and telegram at the level you specified if enabled 
                 time.stamp()        // returns a string  month-day-hour-min-sec-ms
-                sys.writeNV()       // write non-volatile memory to the disk if you need store data there in   nv.MyFunctionData
+                sys.fileWriteNV()       // write non-volatile memory to the disk if you need store data there in   nv.MyFunctionData
                                     // file is saved to the WorkingDir you specified/nv.json
 
                 incoming websocket data from home assistant:
@@ -328,9 +328,15 @@ let
                     
             */
 
+                    // if your automation function requires non-volatile memory, you must delete the nv.json file if it already exists and initialize the NV mem on first run using the sys.writeNV() function
+                    // or, do something like  if(nv.myFunction.myVar == undefined) nv.myFunction.myVar = true   then call  sys.fileWriteNV();
 
+                    
+                    // initialize the volatile memory for your automation function
+
+                    // for multi object system use like this, user DD system for example
             /*
-            if (!state.myAutomation) {     // initialize the volatile memory for your automation function
+            if (!state.myAutomation) {     
                 state.myAutomation = [];
                 cfg.myAutomation.forEach(element => {
                     state.myAutomation.push({
@@ -339,8 +345,19 @@ let
                 });
             }
             */
-            /*
-                        if (state.myAutomation.listener == false) {  // initialize your HA input event listener for your automation
+
+
+            // for single object system use like this
+      /*
+            if (!state.myAutomation) {     
+                state.myAutomation = {listeners:false, myVariable: false,};
+            }
+            */
+
+
+                        // initialize the HA input event listener for your automation function, receive the input data or parse
+            /*              
+                        if (state.myAutomation.listener == false) {  
                             em.on(cfg.input.ha["my home assistant number here"], function (data) {
                                 switch (data) {
                                     case true:
@@ -359,7 +376,7 @@ let
                         }
             */
 
-            // example to send data to home assistant
+            // example to send data to home assistant within your function
 
             /*  
                 //  example for switch
@@ -414,18 +431,18 @@ let
                 else if (msg.text == "/start") bot.sendMessage(msg.chat.id, "give me passcode");
                 else bot.sendMessage(msg.chat.id, "i dont know you, go away");
             },
-            callback: function (msg) {  // enter a two character code to indentify your callback "case" 
+            callback: function (msg) {  // enter a two character code to identify your callback "case" 
                 let code = msg.data.slice(0, 2);
                 let data = msg.data.slice(2);
                 switch (code) {
                     case "dd":
-                        for (let x = 0; x < cfg.dd.length; x++) {   // read button input and toggle corisponding DD system
+                        for (let x = 0; x < cfg.dd.length; x++) {   // read button input and toggle corresponding DD system
                             if (data == (cfg.dd[x].name + " on")) { toggleDD("on", x); break; }
                             if (data == (cfg.dd[x].name + " off")) { toggleDD("off", x); break; }
                         }
                         break;
                 }       // create a function for use with your callback
-                function toggleDD(newState, x) {    // function that reads the callback input and toggles corisponding boolean in Home Assistant
+                function toggleDD(newState, x) {    // function that reads the callback input and toggles corresponding boolean in Home Assistant
                     bot.sendMessage(msg.from.id, "pump " + cfg.dd[x].name + " " + newState);
                     hass.services.call("turn_" + newState, 'input_boolean', { entity_id: cfg.input.ha[cfg.dd[x].haAuto] })
                 }
@@ -841,7 +858,7 @@ let
             }
             ha.push();
         },
-        initNV: function () {
+        initNV: function () {   // create NV placeholder data 
             for (let x = 0; x < cfg.flow.length; x++) {
                 nv.flow.push({ total: 0, min: [], hour: [], day: [] })
                 for (let y = 0; y < 60; y++) nv.flow[x].min.push(0);
@@ -849,7 +866,7 @@ let
                 for (let y = 0; y < 30; y++) nv.flow[x].day.push(0);
             }
         },
-        initState: function () {  // initiate system volitile memory
+        initState: function () {  // initiate system volatile memory
             for (let x = 0; x < cfg.flow.length; x++) {
                 state.flow.push({
                     lm: 0,
@@ -902,7 +919,7 @@ let
                 process.exit();
             }
         },
-        fileWriteNV: function () {  // write non-volitile memory to the disk
+        fileWriteNV: function () {  // write non-volatile memory to the disk
             fs.writeFile(config.workingDir + "nv-bak.json", JSON.stringify(nv), function () {
                 fs.copyFile(config.workingDir + "nv-bak.json", config.workingDir + "nv.json", (err) => {
                     if (err) throw err;
