@@ -49,11 +49,11 @@ This is a fully automated multi system pump management system and the main purpo
 
 # Diagnostic/debugging web access: (use Firefox for pretty JSON formatting)
 
-* http:/127.0.0.1/logs         -last 500 log messages
-* http:/127.0.0.1/ha           -show all entities available from Home Assistant
-* http:/127.0.0.1/ws           -last 500 websocket updates (raw)
-* http:/127.0.0.1/tg           -last 100 received Telegram messages 
-* http:/127.0.0.1/esp          -show all discovered ESP Home modules
-* http:/127.0.0.1/nv           -show all non-volatile memory
-* http:/127.0.0.1/state        -show all volatile memory
-* http:/127.0.0.1/cfg          *-shoe all hard coded configuration
+* http:/127.0.0.1/logs         ----last 500 log messages
+* http:/127.0.0.1/ha           ------show all entities available from Home Assistant
+* http:/127.0.0.1/ws           ------last 500 websocket updates (raw)
+* http:/127.0.0.1/tg           ------last 100 received Telegram messages 
+* http:/127.0.0.1/esp          -----show all discovered ESP Home modules
+* http:/127.0.0.1/nv           -----show all non-volatile memory
+* http:/127.0.0.1/state        --show all volatile memory
+* http:/127.0.0.1/cfg          ----show all hard coded configuration
