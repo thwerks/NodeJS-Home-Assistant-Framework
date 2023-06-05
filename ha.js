@@ -3,7 +3,7 @@ let config = {
     espEnabled: false,                  // enable Node ESP Home API
     webDiag: true,                      // enable debug web server
     webDiagPort: 80,                    // debug web server port number
-    workingDir: "/home/user/ha/",            // specify the working director for non-volitie data storage
+    workingDir: "/home/dlee/Desktop/",            // specify the working director for non-volatile data storage
     homeAssistant: {
         address: "10.20.2.136",         // pretty straight forward 
         port: 8123,                     // HA port
@@ -35,13 +35,13 @@ let
                 flowStartWarn: 70,      // min start flow before triggering notification (useful for filters) (LPM)
                 flowCheckWait: 6,       // seconds to wait before checking flow after pump starts
                 faultFlowRety: 10,      // time in seconds to wait for retry
-                faultFlowFinal: 1,      // time in minuts to wait for final retry
+                faultFlowFinal: 1,      // time in minutes to wait for final retry
             },
             {   // DD system 2 example
                 name: "Compressor",     // Demand Delivery system name
                 haAuto: 8,              // home assistant auto toggle ID number (specified below in cfg.input.ha config)
                 haPump: 3,              // home assistant pump switch ID Number (specified below in cfg.input.ha config)
-                cfgTankOutput: 0,       // destination tank confid ID number  (specified below in cfg.input.ha config)
+                cfgTankOutput: 0,       // destination tank config ID number  (specified below in cfg.input.ha config)
             },
         ],
         tank: [     // config for tanks used with Home Assistant
@@ -66,7 +66,7 @@ let
             {   // flow meter 1 example
                 name: "flow",           // flow meter name that will appear in HA as a sensor (do not use spaces or dash, underscore only)
                 pulse: 0.2,             // pulse calculation factor for your specific flow meter
-                unit: "m3",             // unit of measurment (cubic meters)
+                unit: "m3",             // unit of measurement (cubic meters)
                 haFlow: 4               // home assistant flow meter ID Number (specified below in cfg.input.ha config)
             }
         ],
@@ -948,7 +948,7 @@ function log(message, mod, level) {
         case 3: buf += "|!!ERROR!!|"; break;
         default: buf += "|  Event  |"; break;
     }
-    switch (mod) {
+    switch (mod) {          // add a case for your module name
         case 0: buf += " system | "; break;
         case 1: buf += "     HA | "; break;
         case 2: buf += "Delivery| "; break;
