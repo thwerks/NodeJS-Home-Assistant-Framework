@@ -41,4 +41,4 @@ This is a fully automated multi system pump management system and the main purpo
 
 # How to use this framework:
 
-* Please consult the ha.ja file for instruction and submit an Issue if you have a question so others can benefit from the discussion
+* Please consult the ha.js file for instruction and submit an Issue if you have a question so others can benefit from the discussion
