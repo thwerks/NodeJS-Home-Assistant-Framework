@@ -31,8 +31,8 @@ let
                 haPump: 1,              // home assistant pump switch ID Number (specified below in cfg.input.ha config)
                 cfgFlow: 0,             // flow meter config ID number
                 cfgTankOutput: 1,       // destination tank config ID number  (specified below in cfg.input.ha config)
-                flowStartMin: 60,       // minimum flow rate pump must reach at start
-                flowStartWarn: 70,      // min start flow before triggering notification (useful for filters)
+                flowStartMin: 60,       // minimum flow rate pump must reach at start in LPM
+                flowStartWarn: 70,      // min start flow before triggering notification (useful for filters) (LPM)
                 flowCheckWait: 6,       // seconds to wait before checking flow after pump starts
                 faultFlowRety: 10,      // time in seconds to wait for retry
                 faultFlowFinal: 1,      // time in minuts to wait for final retry
@@ -48,8 +48,8 @@ let
             {   // Tank 1 example
                 name: "tank_tazok",     // tank name (do not use spaces or dash, underscore only)
                 unit: "m",              // measurement unit (i.e. PSI or meters)
-                full: 2.08,             // Demand Delivery system stop level
-                low: 1.95,              // Demand Delivery system start level
+                full: 2.08,             // Demand Delivery system stop level in (meters) or PSI
+                low: 1.95,              // Demand Delivery system start level (meters) or PSI
                 warn: 1.75,             // threshold to send warning notification
                 haPress: 5              // home assistant pressure sensor ID Number (specified below in cfg.input.ha config)
             },
@@ -65,8 +65,8 @@ let
         flow: [      // config for flow meters used with Home Assistant
             {   // flow meter 1 example
                 name: "flow",           // flow meter name that will appear in HA as a sensor (do not use spaces or dash, underscore only)
-                pulse: 0.2,             // pulse calculation factor
-                unit: "m3",             // unit of measurment
+                pulse: 0.2,             // pulse calculation factor for your specific flow meter
+                unit: "m3",             // unit of measurment (cubic meters)
                 haFlow: 4               // home assistant flow meter ID Number (specified below in cfg.input.ha config)
             }
         ],
@@ -88,7 +88,7 @@ let
             ]
         }
     },
-    auto = [    // automation function array to add your custom automation, called every time an incomming state change comes from Home Assistant
+    auto = [    // automation function array to add your custom automation, called every time an incoming state change comes from Home Assistant
         function () {   // Demand Delivery System
             if (!state.dd) {
                 state.dd = [];
@@ -300,28 +300,28 @@ let
                 }
             }
         },
-        function () {   // exmaple automation function 
+        function () {   // example automation function 
 
             /*
                 some general information:
 
                 Functions:
-                log("my string", numberOfYourModule, sevarity)      // 0 debug, 1 event, 2 warning, 3 error
-                                                                    // create and entry for your module name in the log() function at the end of this script
+                log("my string", numberOfYourModule, severity)      // 0 debug, 1 event, 2 warning, 3 error
+                                                                    // create an entry for your module name in the log() function at the end of this script
                                                                     // logs to console and telegram at the level you specified if enabled 
                 time.stamp()        // returns a string  month-day-hour-min-sec-ms
-                sys.writeNV()       // write non-volitile memory to the disk if you need store data there in   nv.MyFunctionData
+                sys.writeNV()       // write non-volatile memory to the disk if you need store data there in   nv.MyFunctionData
                                     // file is saved to the WorkingDir you specified/nv.json
 
                 incoming websocket data from home assistant:
                     see below how to initialize your event listener. 
-                    every input/output from HA gets an emmiter with the exact name in HA and its state
-                    you can see all the available entites  in the diag webpage using your IP and the port you specified
+                    every input/output from HA gets an emitter with the exact name in HA and its state
+                    you can see all the available entities  in the diag webpage using your IP and the port you specified
 
                     http://10.0.0.1/ha      // all available HA entities
                     http://10.0.0.1/ws      // history of that last 500 websocket updates
-                    http://10.0.0.1/state   // see all the volitile memory of your functions
-                    http://10.0.0.1/nv      // see all the non-volitile memory of your functions
+                    http://10.0.0.1/state   // see all the volatile memory of your functions
+                    http://10.0.0.1/nv      // see all the non-volatile memory of your functions
                     http://10.0.0.1/cfg     // see all the hard coded configs of your functions
                     http://10.0.0.1/tg      // see last 500 incoming telegram messages
                     http://10.0.0.1/log     // see last 500 log messages
@@ -330,7 +330,7 @@ let
 
 
             /*
-            if (!state.myAutomation) {     // initialize the volitile memory for your automation function
+            if (!state.myAutomation) {     // initialize the volatile memory for your automation function
                 state.myAutomation = [];
                 cfg.myAutomation.forEach(element => {
                     state.myAutomation.push({
@@ -345,11 +345,11 @@ let
                                 switch (data) {
                                     case true:
                                         log(" - is going ONLINE");
-                                        performFunctionwTrue();
+                                        performFunctionTrue();
                                         return;
                                     case false:
                                         log(" - is going OFFLINE");
-                                        performFunctionwFalse();
+                                        performFunctionFalse();
                                         return;
                                 }
                                 return;
@@ -367,7 +367,7 @@ let
                 .then(data => {   })                    // optional  -  do something after completion if you want
                 .catch(err => log(err)0,3)              // optional  -  catch and log error if you want
 
-                //  exampke for boolean
+                //  example for boolean
                  hass.services.call('turn_on', 'input_boolean', { entity_id: cfg.input.ha[number of your input] })
     
                 // example for sensor
