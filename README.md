@@ -11,7 +11,7 @@
 
 I'll be blunt, Home Assistant isn't suitable for industrial applications or where malfunctions can lead to costly equipment damage. Furthermore, data manipulation and management is very cumbersome and difficult if even possible given a particular situation. The state management for certain conditions like startup, power loss, errors and other likely conditions is difficult to understand and control in HA. Withstanding, the HA GUI being only one of many options for monitoring and control mechanisms in this scheme makes it completely acceptable for use in an industrial setting. 
 
-Though Home Assistant may be reliable for some situations, using it for complex environments with multiple flow meters, pressure sensors, large motors and a multitude of inputs and outputs of that sort; it’s simply is not up to the task. It's not intended for that and that's fine. 
+Though Home Assistant may be reliable for some situations, using it for complex environments with multiple flow meters, pressure sensors, large motors and a multitude of inputs and outputs of that sort; it’s simply is not up to the task. It's not intended for that and that's fine but NodeJS can do this kind of thing easily.
 
 I realize some people are not going to appreciate what im doing, aren't going to see the point, will not agree with anything I do or how I do it. If thats you, please understand that I'm obviously not doing this for you. I personally think using NodeJS for the heavy lifting and HA only for its GUI is a great idea, if that sounds like a good idea to you, great! If you don't think so, then just move along and have a wonderful day. 
 
