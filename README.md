@@ -1,6 +1,6 @@
 #### If you have a question, please just open a dialog in the “issue” section so others can benefit from the discussion. 
 
-#### need some small help with the twocolors/esphome-native-api. Cannot get outgoing push messages to work, confusion about setState usage, can contribute here https://github.com/twocolors/esphome-native-api/issues/19 
+#### I'm currently struggling with twocolors/esphome-native-api. Cannot get outgoing push messages to work, confusion about setState usage. If you know about this, please contribute here https://github.com/twocolors/esphome-native-api/issues/19 
 
 #### Who am I?
 
