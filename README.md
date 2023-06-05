@@ -28,7 +28,7 @@ The Key takeaway here is that the HA Core API responds on average in about 2-5ms
 * Telegram API is leveraged here and can be used for both event notification as well as remote control
 * There is a complete diagnostic web engine to aid in the setup and debugging of your code
 
-# The included Demand/Deliver pump automation function:
+# About the included Demand/Delivery pump automation function:
 
 This is a fully automated multi system pump management system and the main purpose of this creation. It is currently in service and works reliably. 
 
