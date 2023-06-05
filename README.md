@@ -29,6 +29,7 @@ The Key takeaway here is that the HA Core API responds on average in about 2-5ms
 * It has a nice and simple to use logging function
 * Telegram API is leveraged here and can be used for both event notification as well as remote control
 * There is a complete diagnostic web engine to aid in the setup and debugging of your code
+* Has systemD service creator.  run   node ha.ja -i   to create your service when you got everything working 
 
 # About the included Demand/Delivery pump automation function:
 
@@ -48,6 +49,7 @@ This is a fully automated multi system pump management system and the main purpo
 * For creating your own automation function, see the example function in the "auto" function array code block
 * For using the Demand Delivery module, see the example configurations description
 * Suggestions and ideas are welcome but please refrain from semantical or techno-philosophic preferential ranting or otherwise self-perfectionist jabbing. Don't clutter my github with that nonsense. App programmers and machine  programmers have very different approaches to programming for very different reasons and will never agree with one another. If your an application programmer just keep your comments to yourself.
+* Install as a service using PM2 or the included SystemD installer, run   node ha.ja -i
 
 # Diagnostic/debugging web access: (use Firefox for pretty JSON formatting)
 
