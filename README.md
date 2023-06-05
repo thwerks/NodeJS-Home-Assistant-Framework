@@ -33,7 +33,9 @@ The Key takeaway here is that the HA Core API responds on average in about 2-5ms
 
 # About the included Demand/Delivery pump automation function:
 
-This is a fully automated multi system pump management system and the main purpose of this creation. It is currently in service and works reliably. 
+This is a fully automated industrial multi-system multi-pump control platform and the main purpose of this creation. It is currently in service and works reliably in large industrial applications delivering 100,000+ liters per day. Soon to be deployed to a huge solar pump facility with 160hp pumps. Ok, so this is a working industrial system and has proven itself. 
+
+If you're not interested in the Demand Delivery system, it should be very easy to remove it and the configuration. Try it, if you can do it ill have a look, maybe fork a version without that. 
 
 * Its primarily designed to work with flow meters (of any size) for monitoring and safe operation. Though the flow meter is options, the pressure transducer for tank level detection or for pressure tank level is required at the moment, Other configurations may be included later or if there was the need.
 * Tank levels are sent back to HA in percentage readout as dependent upon user configurations
