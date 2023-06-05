@@ -1,0 +1,80 @@
+esphome:
+  name: esp-filter
+  friendly_name: ESP-Filter
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+logger:
+api:
+  encryption:
+    key: "myKey"
+ota:
+  password: "myKey"
+wifi:
+  ssid: HotSpot-Genset
+  ap:
+    ssid: "ESP Genset Fallback"
+    password: "myKey"
+  manual_ip:
+    static_ip: 10.21.4.30
+    gateway: 10.21.4.1
+    subnet: 255.255.254.0
+    dns1: 8.8.8.8
+captive_portal:
+sensor:
+  - platform: pulse_counter     # example flow meter
+    name: "Flow-Filter"
+    pin: GPIO14
+    update_interval: 1s
+    filters:
+    - lambda: return x;
+    unit_of_measurement: "pps"  # send data as pulses per second or hz
+    accuracy_decimals:  0 
+  - platform: adc               # example 5psi pressure transducer
+    name: "PSI-Tank-Mountain"
+    pin: GPIO35
+    id: pressure
+    update_interval: 1s
+    unit_of_measurement: "m"
+    accuracy_decimals: 2 
+    attenuation: 11db
+    filters:
+      - calibrate_linear:
+        - 0.5 -> 0.0
+        - 3.3 -> 2.4607         # for 5psi transducer .5-4.5v = 0-5 psi therefore .5-3.3v = 0-3.5 psi and 1 psi = .7031 meters head so 3.3v = 2.4607 meters
+      - median:
+            window_size: 50
+            send_every: 2
+binary_sensor:                  # example binary input sensor
+  - platform: gpio
+    name: "Switch-Tazok"
+    pin:
+      number: 27
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    filters:
+      - delayed_on: 1000ms
+switch:                         # switch output example
+  - platform: gpio
+    name: "Relay-Submersible"
+    pin:
+      number: 23
+      inverted: true
+  - platform: gpio
+    name: "Relay2"
+    pin:
+      number: 22
+      inverted: true
+  - platform: gpio
+    name: "Relay3"
+    pin:
+      number: 21
+      inverted: true
+  - platform: gpio
+    name: "Relay4"
+    pin:
+      number: 18
+      inverted: true
