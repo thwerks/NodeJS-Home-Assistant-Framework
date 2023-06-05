@@ -83,8 +83,8 @@ let
                 "input_boolean.auto_compressor",          // 8
             ],
             esp: [  // testing - ESP Home modules that will be subscribed to
-                { ip: "10.21.4.30", key: "0y0rkpBFeXRCbQ0HwR5c0Iy0mIChWci6PstCIZO/cUA=" },
-                { ip: "10.21.4.31", key: "dlLHNXBB/nn4AkR5cPdD/ZGzpELXwhvWmdi6NfTXX38=" },
+                { ip: "10.21.4.30", key: "myKey" },
+                { ip: "10.21.4.31", key: "myKey" },
             ]
         }
     },
