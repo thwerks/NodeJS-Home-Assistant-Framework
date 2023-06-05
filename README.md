@@ -42,3 +42,5 @@ This is a fully automated multi system pump management system and the main purpo
 # How to use this framework:
 
 * Please consult the ha.js file for instruction and submit an Issue if you have a question so others can benefit from the discussion
+* for creating your own automation function, see the example function in the "auto" function array code block
+* for using the Demand Delivery module, see the example configurations description
