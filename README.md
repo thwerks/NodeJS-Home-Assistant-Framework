@@ -1,4 +1,6 @@
-#### If you have a question, please just open a dialog in the “issue” section so others can banefit ftom the discussion. 
+#### If you have a question, please just open a dialog in the “issue” section so others can benefit from the discussion. 
+
+#### need some small help with the twocolors/esphome-native-api. Cannot get outgoing push messages to work, confusion about setState usage, can contribute here https://github.com/twocolors/esphome-native-api/issues/19 
 
 
 # What is this framework for:
@@ -44,3 +46,22 @@ This is a fully automated multi system pump management system and the main purpo
 * Please consult the ha.js file for instruction and submit an Issue if you have a question so others can benefit from the discussion
 * for creating your own automation function, see the example function in the "auto" function array code block
 * for using the Demand Delivery module, see the example configurations description
+
+# Diagnostic/debugging web access: (use Firefox for pretty JSON formatting)
+
+* http:/127.0.0.1/logs
+    last 500 log messages
+* http:/127.0.0.1/ha
+    show all entities available from Home Assistant
+* http:/127.0.0.1/ws
+    show last 500 websocket updates (raw)
+* http:/127.0.0.1/tg
+    show last 100 received Telegram messages 
+* http:/127.0.0.1/esp
+    show all discovered ESP Home modules
+* http:/127.0.0.1/nv
+    show all non-volatile memory
+* http:/127.0.0.1/state
+    show all volatile memory
+* http:/127.0.0.1/cfg
+    shoe all hard coded configuration
