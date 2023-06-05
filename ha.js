@@ -17,8 +17,8 @@ let config = {
         remote: true,                   // enable telegram remote control
         password: "test",               // password to register user ID with telegram bot
         loglevel: 2,                    // 0: debug, 1: event, 2: warning, 3: error
-        logDebug: true,                 // lod debug override 
-        token: "myToken"
+        logDebug: true,                 // logging debug override 
+        token: "myToken"                // Telegram Bot token
     },
 };
 lib();  // load package dependencies 
