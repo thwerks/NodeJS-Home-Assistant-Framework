@@ -27,7 +27,7 @@ The Key takeaway here is that the HA Core API responds on average in about 2-5ms
 * Rebooting of ether NodeJS or of HA has no detrimental effect for the most part. System recovery is controlled and predictable. 
 * At present, Home Assistant is still the gateway for ESPHome devices; meaning that HA is the subscriber and forwards incoming data to NodeJS via websocket. This will become optional when the NodeJS ESPHome API is fully incorporated, then NodeJS will be the sole subscriber and HA will only be used as a GUI
 * It has a nice and simple to use logging function
-* Telegram API is leveraged here and can be used for both event notification as well as remote control
+* Telegram API is leveraged here and can be used for both event notification as well as remote control. Useful because oyu can remotely control your system without VPN. 
 * There is a complete diagnostic web engine to aid in the setup and debugging of your code
 * Has systemD service creator.  run   node ha.ja -i   to create your service when you got everything working 
 
