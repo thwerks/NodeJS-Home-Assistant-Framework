@@ -3,7 +3,7 @@
 
 # What is this framework for:
 
-This framework is built to give you a head start on using NodeJS for making reliable and complex automations while only leveraging Home Assistant’s nice and robust web and smartphone GUI. 
+This framework is built to give you a head start on using NodeJS for making reliable and complex automations while only leveraging Home Assistant for it's nice and robust web and smartphone GUI. 
 
 To put it bluntly, Home Assistant isn't suitable for industrial applications or where malfunctions can lead to costly equipment damage. Furthermore, data manipulation and management is very cumbersome and difficult if even possible given a particular situation. The state management for certain conditions like startup, power loss, errors and other likely conditions is difficult to understand and control in HA. 
 
