@@ -3,7 +3,7 @@
 
 # What is this framework for:
 
-This framework is built to give you a head start on using NodeJS for making reliable and complex automations while olny leveraging Home Assistant’s nice and robust web and smartphone GUI. 
+This framework is built to give you a head start on using NodeJS for making reliable and complex automations while only leveraging Home Assistant’s nice and robust web and smartphone GUI. 
 
 To put it bluntly, Home Assistant isn't suitable for industrial applications or where malfunctions can lead to costly equipment damage. Furthermore, data manipulation and management is very cumbersome and difficult if even possible given a particular situation. The state management for certain conditions like startup, power loss, errors and other likely conditions is difficult to understand and control in HA. 
 
@@ -34,7 +34,7 @@ This is a fully automated multi system pump management system and the main purpo
 
 * Its primarily designed to work with flow meters (of any size) for monitoring and safe operation. Though the flow meter is options, the pressure transducer for tank level detection or for pressure tank level is required at the moment, Other configurations may be included later or if there was the need.
 * Tank levels are sent back to HA in percentage readout as dependent upon user configurations
-* Start and stop levels, flow rate and meter lamba, and all pertinent settings are user configurable.
+* Start and stop levels, flow rate and meter lamda, and all pertinent settings are user configurable.
 * Flow meters are sent back to HA for last hour and 24 hours average
 
 
