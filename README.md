@@ -18,7 +18,7 @@ The Key takeaway here is that the HA Core API responds on average in about 2-5ms
 
 # What does this framework do:
 
-* It completely removes all need for automation logic and control from Home Assistant
+* It completely removes all need for automation logic and control in Home Assistant
 * Power loss state recovery is reliable and predictable
 * This framework is immune to network interruptions
 * This framework is very simple and easy to use
