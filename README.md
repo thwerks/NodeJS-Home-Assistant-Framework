@@ -2,11 +2,6 @@
 
 #### I'm currently struggling with twocolors/esphome-native-api. Cannot get outgoing push messages to work, confusion about setState usage. If you know about this, please contribute here https://github.com/twocolors/esphome-native-api/issues/19 
 
-#### Who am I?
-
-* I am an industrial automation, electrical and electronics engineer. I design systems for oil refineries, desalination plants, large solar pump stations, municipal water delivery and treatment systems. Many of the systems I have built from the ground up and I am intimately familiar with the electronics, electrical design, mechanical and software development of these kinds of systems.
-* Im trying something new in attempting to make this NodeJS framework available to the public. I admit the delivery is a bit out of the ordinary but I feel good about it. Im eger to make the documentation more complete, largely directed by the questions people have about implementing it.
-
 ## Preamble 
 
 I'll be blunt, Home Assistant isn't suitable for industrial applications or where malfunctions can lead to costly equipment damage. Furthermore, data manipulation and management is very cumbersome and difficult if even possible given a particular situation. The state management for certain conditions like startup, power loss, errors and other likely conditions is difficult to understand and control in HA. Withstanding, the HA GUI being only one of many options for monitoring and control mechanisms in the scheme of this framework makes it completely acceptable for use in an industrial setting. 
