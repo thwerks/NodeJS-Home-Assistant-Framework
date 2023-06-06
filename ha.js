@@ -53,7 +53,7 @@ let
                 cfgTankOutput: 0,       // destination tank config ID number  (specified below in cfg.input.ha config)
             },
         ],
-        tank: [     // config for tanks used with Home Assistant
+        tank: [     // config for tanks used with Home Assistant -- these tanks get sent back to HA as sensors
             {   // Tank 1 example
                 name: "tank_tazok",     // tank name (do not use spaces or dash, underscore only)
                 unit: "m",              // measurement unit (i.e. PSI or meters)
@@ -71,7 +71,7 @@ let
                 haPress: 6              // home assistant pressure sensor ID Number (specified below in cfg.input.ha config)
             },
         ],
-        flow: [      // config for flow meters used with Home Assistant
+        flow: [      // config for flow meters used with Home Assistant -- these flowmeters get sent back to HA as sensors
             {   // flow meter 1 example
                 name: "flow",           // flow meter name that will appear in HA as a sensor (do not use spaces or dash, underscore only)
                 pulse: 0.2,             // pulse calculation factor for your specific flow meter
@@ -108,13 +108,13 @@ let
                                                                     // create an entry for your module name in the log() function at the end of this script
                                                                     // logs to console and telegram at the level you specified if enabled 
                 time.stamp()        // returns a string  month-day-hour-min-sec-ms
-                sys.fileWriteNV()       // write non-volatile memory to the disk if you need store data there in   nv.MyFunctionData
-                                    // file is saved to the WorkingDir you specified/nv.json
+                sys.file.write.nv() // write non-volatile memory to the disk if you need store data there in   nv.MyFunctionData
+                                    // file is saved to the WorkingDir you specified ./nv.json
 
-                incoming websocket data from home assistant:
+                incoming entity state change websocket data from home assistant:
                     see below how to initialize your event listener. 
-                    every input/output from HA gets an emitter with the exact name in HA and its state
-                    you can see all the available entities  in the diag webpage using your IP and the port you specified
+                    every input/output from HA gets an emitter with the exact name in HA and its state.
+                    You can see all the available entities in the diag webpage using your IP and the port you specified
 
                     http://10.0.0.1/ha      // all available HA entities <-----------------
 
@@ -128,12 +128,12 @@ let
                     
             */
 
-                    // if your automation function requires non-volatile memory, you must delete the nv.json file if it already exists and initialize the NV mem on first run using the sys.writeNV() function
-                    // or, do something like  if(nv.myFunction.myVar == undefined) nv.myFunction.myVar = true   then call  sys.fileWriteNV();
+                    // if your automation function requires non-volatile memory, you must delete the nv.json file if it already exists and initialize the NV mem on first run using the sys.file.write.nv() function
+                    // or, do something like  if(nv.myFunction.myVar == undefined) nv.myFunction.myVar = true   then call  sys.file.write.nv();
+
 
 
                     // initialize the volatile memory for your automation function
-
                     // for multi object system use like this, user DD system for example
             /*
             if (!state.myAutomation) {     
@@ -161,11 +161,11 @@ let
                             em.on(cfg.input.ha["my home assistant number here"], function (data) {
                                 switch (data) {
                                     case true:
-                                        log(" - is going ONLINE");
+                                        log(" - log something... Turn ON");
                                         performFunctionTrue();
                                         return;
                                     case false:
-                                        log(" - is going OFFLINE");
+                                        log(" - log something... OFFLINE");
                                         performFunctionFalse();
                                         return;
                                 }
