@@ -23,7 +23,16 @@ let config = {
 };
 lib();  // load package dependencies 
 let
-    cfg = {         // add a config object here for automation function
+    cfg = {         // add a config object here for you custom automation function
+        /*
+        myAutomation: {
+
+
+        };
+
+
+        */
+
         dd: [       // config for the Demand/Delivery automation function, 1 object for each pump system
             {   // DD system 1 example
                 name: "Tazok",          // Demand Delivery system name
@@ -107,7 +116,9 @@ let
                     every input/output from HA gets an emitter with the exact name in HA and its state
                     you can see all the available entities  in the diag webpage using your IP and the port you specified
 
-                    http://10.0.0.1/ha      // all available HA entities
+                    http://10.0.0.1/ha      // all available HA entities <-----------------
+
+                                    // other debugging/diag locations 
                     http://10.0.0.1/ws      // history of that last 500 websocket updates
                     http://10.0.0.1/state   // see all the volatile memory of your functions
                     http://10.0.0.1/nv      // see all the non-volatile memory of your functions
@@ -174,7 +185,7 @@ let
                 .catch(err => log(err)0,3)              // optional  -  catch and log error if you want
 
                 //  example for boolean
-                 hass.services.call('turn_on', 'input_boolean', { entity_id: cfg.input.ha[number of your input] })
+                hass.services.call('turn_on', 'input_boolean', { entity_id: cfg.input.ha[number of your input] })
     
                 // example for sensor
                 hass.states.update('sensor', "any name of sensor you want to appear in ha", { state: myValue, attributes: { state_class: 'measurement', unit_of_measurement: "any unit you like" } })
