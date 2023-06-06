@@ -97,7 +97,7 @@ let
             ]
         }
     },
-    auto = [    // automation function array to add your custom automation, called every time an incoming state change comes from Home Assistant
+    auto = [ // automation function array . add your custom automation here, the whole array is enumerated every time an incoming state change comes from Home Assistant
         function () {   // example automation function 
 
             /*
@@ -128,13 +128,13 @@ let
                     
             */
 
-                    // if your automation function requires non-volatile memory, you must delete the nv.json file if it already exists and initialize the NV mem on first run using the sys.file.write.nv() function
-                    // or, do something like  if(nv.myFunction.myVar == undefined) nv.myFunction.myVar = true   then call  sys.file.write.nv();
+            // if your automation function requires non-volatile memory, you must delete the nv.json file if it already exists and initialize the NV mem on first run using the sys.file.write.nv() function
+            // or, do something like  if(nv.myFunction.myVar == undefined) nv.myFunction.myVar = true   then call  sys.file.write.nv();
 
 
 
-                    // initialize the volatile memory for your automation function
-                    // for multi object system use like this, user DD system for example
+            // initialize the volatile memory for your automation function
+            // for multi object system use like this, user DD system for example
             /*
             if (!state.myAutomation) {     
                 state.myAutomation = [];
@@ -148,14 +148,14 @@ let
 
 
             // for single object system use like this
-      /*
-            if (!state.myAutomation) {     
-                state.myAutomation = {listeners:false, myVariable: false,};
-            }
-            */
+            /*
+                  if (!state.myAutomation) {     
+                      state.myAutomation = {listeners:false, myVariable: false,};
+                  }
+                  */
 
 
-                        // initialize the HA input event listener for your automation function, receive the input data or parse
+            // initialize the HA input event listener for your automation function, receive the input data or parse
             /*              
                         if (state.myAutomation.listener == false) {  
                             em.on(cfg.input.ha["my home assistant number here"], function (data) {
@@ -431,7 +431,7 @@ let
                             bot.sendMessage(msg.from.id, "Remote Control Menu:")
                             setTimeout(() => {      // delay to ensure menu Title gets presented first in Bot channel
                                 for (let x = 0; x < cfg.dd.length; x++)  sys.telegram.button(msg, "dd", cfg.dd[x].name);    // iterate each DD system and create button
-                            }, 2);
+                            }, 2);              //  sys.telegram.button(msg, "2 letter callback", "button name")   this create and send the button and assigns the callback below
                             break;
                         case "1": em.emit(test[1][4], true); log("true", 0, 0); break;      // for testing of ESPhome API
                         case "2": em.emit(test[1][4], false); log("false", 0, 0); break;    // for testing of ESPhome API
@@ -445,21 +445,21 @@ let
                 let code = msg.data.slice(0, 2);
                 let data = msg.data.slice(2);
                 switch (code) {
-                    case "dd":
-                        for (let x = 0; x < cfg.dd.length; x++) {   // read button input and toggle corisponding DD system
+                    case "dd":      // two letter callback specified above in the Button function
+                        for (let x = 0; x < cfg.dd.length; x++) {   // read button input and toggle corresponding DD system
                             if (data == (cfg.dd[x].name + " on")) { toggleDD("on", x); break; }
                             if (data == (cfg.dd[x].name + " off")) { toggleDD("off", x); break; }
                         }
                         break;
                 }       // create a function for use with your callback
-                function toggleDD(newState, x) {    // function that reads the callback input and toggles corisponding boolean in Home Assistant
+                function toggleDD(newState, x) {    // function that reads the callback input and toggles corresponding boolean in Home Assistant
                     bot.sendMessage(msg.from.id, "pump " + cfg.dd[x].name + " " + newState);
                     hass.services.call("turn_" + newState, 'input_boolean', { entity_id: cfg.input.ha[cfg.dd[x].haAuto] })
                 }
             },
         },
     },
-    ha = {
+    ha = {      // nothing to touch here
         fetch: function () {
             fetch = state.ha.fetch;
             let sendDelay = 0;
@@ -678,7 +678,7 @@ let
             em.on('send', function (data) { socket.sendUTF(JSON.stringify(data)); });
         }
     },
-    sys = {
+    sys = {     // nothing to touch here, except .sys.init.nv of want to initialize non-volatile mem on first load
         boot: function (step) {
             switch (step) {
                 case 0:
