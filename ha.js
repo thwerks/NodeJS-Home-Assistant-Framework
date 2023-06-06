@@ -3,11 +3,11 @@ let config = {
     espEnabled: false,                  // enable Node ESP Home API
     webDiag: true,                      // enable debug web server
     webDiagPort: 80,                    // debug web server port number
-    workingDir: "/home/dlee/Desktop/",            // specify the working director for non-volatile data storage
+    workingDir: "/apps/ha",             // specify the working director for non-volatile data storage
     homeAssistant: {
         address: "10.20.2.136",         // pretty straight forward 
         port: 8123,                     // HA port
-        token: "myToken",
+        token: "myToken",               // HA long lived Token - generate this in your HA user profile settings
         log: {
             espDisconnect: false        // log ESP disconnect warning notifications
         }
