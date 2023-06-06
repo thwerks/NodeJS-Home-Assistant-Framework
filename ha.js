@@ -97,317 +97,219 @@ let
             ]
         }
     },
-    auto = [ // automation function array . add your custom automation here, the whole array is enumerated every time an incoming state change comes from Home Assistant
-        function () {   // example automation function 
+    auto = [    // automation function array to add your custom automation, called every time an incomming state change comes from Home Assistant
+    function () {   // Demand Delivery System
+        if (!state.dd) {
+            state.dd = [];
+            cfg.dd.forEach(element => {
+                state.dd.push({
+                    pump: false, pumpFlowCheck: false, pumpFlowCheckPassed: false, pumpOffTimeout: true,
+                    sendRetries: 0, listener: false,
+                    faultFlow: false, faultFlowCancel: false, faultFlowRestarts: 0, faultOverflow: false,
 
-            /*
-                some general information:
-
-                Functions:
-                log("my string", numberOfYourModule, severity)      // 0 debug, 1 event, 2 warning, 3 error
-                                                                    // create an entry for your module name in the log() function at the end of this script
-                                                                    // logs to console and telegram at the level you specified if enabled 
-                time.stamp()        // returns a string  month-day-hour-min-sec-ms
-                sys.file.write.nv() // write non-volatile memory to the disk if you need store data there in   nv.MyFunctionData
-                                    // file is saved to the WorkingDir you specified ./nv.json
-
-                incoming entity state change websocket data from home assistant:
-                    see below how to initialize your event listener. 
-                    every input/output from HA gets an emitter with the exact name in HA and its state.
-                    You can see all the available entities in the diag webpage using your IP and the port you specified
-
-                    http://10.0.0.1/ha      // all available HA entities <-----------------
-
-                                    // other debugging/diag locations 
-                    http://10.0.0.1/ws      // history of that last 500 websocket updates
-                    http://10.0.0.1/state   // see all the volatile memory of your functions
-                    http://10.0.0.1/nv      // see all the non-volatile memory of your functions
-                    http://10.0.0.1/cfg     // see all the hard coded configs of your functions
-                    http://10.0.0.1/tg      // see last 500 incoming telegram messages
-                    http://10.0.0.1/log     // see last 500 log messages
-                    
-            */
-
-            // if your automation function requires non-volatile memory, you must delete the nv.json file if it already exists and initialize the NV mem on first run using the sys.file.write.nv() function
-            // or, do something like  if(nv.myFunction.myVar == undefined) nv.myFunction.myVar = true   then call  sys.file.write.nv();
-
-
-
-            // initialize the volatile memory for your automation function
-            // for multi object system use like this, user DD system for example
-            /*
-            if (!state.myAutomation) {     
-                state.myAutomation = [];
-                cfg.myAutomation.forEach(element => {
-                    state.myAutomation.push({
-                        listeners:false, myVariable: false,
-                    })
-                });
-            }
-            */
-
-
-            // for single object system use like this
-            /*
-                  if (!state.myAutomation) {     
-                      state.myAutomation = {listeners:false, myVariable: false,};
-                  }
-                  */
-
-
-            // initialize the HA input event listener for your automation function, receive the input data or parse
-            /*              
-                        if (state.myAutomation.listener == false) {  
-                            em.on(cfg.input.ha["my home assistant number here"], function (data) {
-                                switch (data) {
-                                    case true:
-                                        log(" - log something... Turn ON");
-                                        performFunctionTrue();
+                    warnFlow: false, warnFlowDaily: false, warnFlowFlush: false, warnHAlag: false, warnSensorFlush: false,
+                    warnTankLow: false,
+                })
+            });
+        }
+        for (let x = 0; x < cfg.dd.length; x++) {
+            let flow = undefined;
+            if (cfg.dd[x].cfgFlow != undefined) flow = state.flow[cfg.dd[x].cfgFlow];
+            let pumpHA = state.ha.input[cfg.dd[x].haPump];
+            let dd = { state: state.dd[x], cfg: cfg.dd[x] };
+            let tankOut = cfg.tank[dd.cfg.cfgTankOutput];
+            switch (state.ha.input[dd.cfg.haAuto]) {
+                case true:                  // when auto is ONLINE
+                    switch (dd.state.pump) {
+                        case false:         // when pump is STOPPED
+                            switch (dd.state.faultFlow) {
+                                case false: // when pump is not flow faulted
+                                    if (state.ha.input[tankOut.haPress] <= tankOut.low) {
+                                        log(dd.cfg.name + " - " + tankOut.name + " is low - pump is starting", 2);
+                                        pumpStart(true);
                                         return;
-                                    case false:
-                                        log(" - log something... OFFLINE");
-                                        performFunctionFalse();
-                                        return;
-                                }
-                                return;
-                            });
-                            state.myAutomation.listener = true;
-                            return;
-                        }
-            */
-
-            // example to send data to home assistant within your function
-
-            /*  
-                //  example for switch
-                hass.services.call('turn_off', 'switch', { entity_id: cfg.input.ha[number of your input] })
-                .then(data => {   })                    // optional  -  do something after completion if you want
-                .catch(err => log(err)0,3)              // optional  -  catch and log error if you want
-
-                //  example for boolean
-                hass.services.call('turn_on', 'input_boolean', { entity_id: cfg.input.ha[number of your input] })
-    
-                // example for sensor
-                hass.states.update('sensor', "any name of sensor you want to appear in ha", { state: myValue, attributes: { state_class: 'measurement', unit_of_measurement: "any unit you like" } })
-                
-                //  you can push a sensor here in your function or on an interval using the user.time.sec function or min if you want 
-        
-                */
-
-
-        },
-        function () {   // Demand Delivery System
-            if (!state.dd) {
-                state.dd = [];
-                cfg.dd.forEach(element => {
-                    state.dd.push({
-                        pump: false, pumpFlowCheck: false, pumpFlowCheckPassed: false, pumpOffTimeout: true,
-                        sendRetries: 0, listener: false,
-                        faultFlow: false, faultFlowCancel: false, faultFlowRestarts: 0, faultOverflow: false,
-
-                        warnFlow: false, warnFlowDaily: false, warnFlowFlush: false, warnHAlag: false, warnSensorFlush: false,
-                        warnTankLow: false,
-                    })
-                });
-            }
-            for (let x = 0; x < cfg.dd.length; x++) {   // for loop for multi object system, iterate over each object
-                let flow = undefined;
-                if (cfg.dd[x].cfgFlow != undefined) flow = state.flow[cfg.dd[x].cfgFlow];
-                let pumpHA = state.ha.input[cfg.dd[x].haPump];
-                let dd = { state: state.dd[x], cfg: cfg.dd[x] };
-                let tankOut = cfg.tank[dd.cfg.cfgTankOutput];
-                switch (state.ha.input[dd.cfg.haAuto]) {
-                    case true:                  // when auto is ONLINE
-                        switch (dd.state.pump) {
-                            case false:         // when pump is STOPPED
-                                switch (dd.state.faultFlow) {
-                                    case false: // when pump is not flow faulted
-                                        if (state.ha.input[tankOut.haPress] <= tankOut.low) {
-                                            log(dd.cfg.name + " - " + tankOut.name + " is low - pump is starting", 2);
+                                    }
+                                    if (dd.state.pumpOffTimeout == true) {  // after pump has been off for a while
+                                        if (pumpHA === true) {
+                                            log(dd.cfg.name + " - pump running in HA but not here - switching pump ON", 2);
                                             pumpStart(true);
                                             return;
-                                        }
-                                        if (dd.state.pumpOffTimeout == true) {  // after pump has been off for a while
-                                            if (pumpHA === true) {
-                                                log(dd.cfg.name + " - pump running in HA but not here - switching pump ON", 2);
-                                                pumpStart(true);
-                                                return;
-                                            } else {
-                                                if (flow != undefined && flow.lm > dd.cfg.flowStartMin && dd.state.warnSensorFlush == false) {
-                                                    log(dd.cfg.name + " - flow is detected (" + flow.lm.toFixed(0) + "lpm) possible sensor damage or flush operation", 2, 2);
-                                                    dd.state.warnSensorFlush = true;
-                                                    return;
-                                                }
-                                            }
-                                        }
-                                        break;
-                                    case true:  // when pump is flow faulted
-                                        if (dd.state.pumpOffTimeout == true) {
-                                            if (pumpHA === true || flow != undefined && flow.lm > dd.cfg.flowStartMin) {
-                                                log(dd.cfg.name + " - pump is flow faulted but HA pump status is still ON, trying to stop again", 2, 3);
-                                                sendData(cfg.input.ha[dd.cfg.haAuto], 'input_boolean', 'turn_off');
-                                                state.ha.input[dd.cfg.haAuto] = false;
-                                                pumpStop();
+                                        } else {
+                                            if (flow != undefined && flow.lm > dd.cfg.flowStartMin && dd.state.warnSensorFlush == false) {
+                                                log(dd.cfg.name + " - flow is detected (" + flow.lm.toFixed(0) + "lpm) possible sensor damage or flush operation", 2, 2);
+                                                dd.state.warnSensorFlush = true;
                                                 return;
                                             }
                                         }
-                                        break
-                                }
-                                break;
-                            case true:      // when pump is RUNNING
-                                if (state.ha.input[tankOut.haPress] >= tankOut.full) {
-                                    if (flow != undefined) {
-                                        let tFlow = flow.temp - flow.batch;
-                                        log(dd.cfg.name + " - " + tankOut.name
-                                            + " is full - pump is stopping - pumped " + tFlow.toFixed(1) + " m3", 2);
-                                    } else { log(dd.cfg.name + " - " + tankOut.name + " is full - pump is stopping", 2); }
-                                    pumpStop();
-                                    return;
-                                }
-                                if (dd.state.pumpFlowCheck == true && flow != undefined) {
-                                    if (flow.lm < dd.cfg.flowStartMin) {
-                                        pumpStop();
-                                        dd.state.faultFlow = true;
-                                        if (dd.state.faultFlowRestarts < 3) {
-                                            log(dd.cfg.name + " - flow check FAILED!! (" + flow.lm.toFixed(1) + "lm) HA Pump State: "
-                                                + pumpHA + " - waiting for retry " + (dd.state.faultFlowRestarts + 1), 2, 2);
-                                            dd.state.faultFlowRestarts++;
-                                            setTimeout(() => {
-                                                if (dd.state.faultFlowCancel == false) dd.state.faultFlow = false; log(dd.cfg.name + " - pump restating", 2);
-                                            }, dd.cfg.faultFlowRety * 1000);
-                                        } else if (dd.state.faultFlowRestarts == 3) {
-                                            log(dd.cfg.name + " - low flow (" + flow.lm.toFixed(1) + "lm) HA State: "
-                                                + pumpHA + " - retries exceeded - going offline for " + dd.cfg.faultFlowFinal + "m", 2, 3);
-                                            dd.state.faultFlowRestarts++;
-                                            setTimeout(() => {
-                                                if (dd.state.faultFlowCancel == false) dd.state.faultFlow = false; log(dd.cfg.name + " - pump restating", 2);
-                                            }, dd.cfg.faultFlowFinal * 60 * 1000);
-                                        }
-                                        else {
-                                            dd.state.faultFlowRestarts++;
-                                            log(dd.cfg.name + " - low flow (" + flow.lm.toFixed(1) + "lm) HA State: "
-                                                + pumpHA + " - all retries failed - going OFFLINE permanently", 2, 3);
+                                    }
+                                    break;
+                                case true:  // when pump is flow faulted
+                                    if (dd.state.pumpOffTimeout == true) {
+                                        if (pumpHA === true || flow != undefined && flow.lm > dd.cfg.flowStartMin) {
+                                            log(dd.cfg.name + " - pump is flow faulted but HA pump status is still ON, trying to stop again", 2, 3);
                                             sendData(cfg.input.ha[dd.cfg.haAuto], 'input_boolean', 'turn_off');
                                             state.ha.input[dd.cfg.haAuto] = false;
-                                        }
-                                    } else {
-                                        if (dd.state.pumpFlowCheckPassed == false) {
-                                            log(dd.cfg.name + " - pump flow check PASSED (" + flow.lm.toFixed(1) + "lm)", 2);
-                                            dd.state.pumpFlowCheckPassed = true;
-                                            dd.state.faultFlowRestarts = 0;
-                                            if (flow.lm < dd.cfg.flowStartWarn && dd.state.warnFlowDaily == false) {
-                                                dd.state.warnFlowDaily = true;
-                                                log(dd.cfg.name + " - pump flow is lower than optimal (" + flow.lm.toFixed(1) + "lm) - clean filter", 2, 2);
-                                            }
+                                            pumpStop();
+                                            return;
                                         }
                                     }
-                                }
-                                break;
-                        }
-                        if (dd.state.warnTankLow != undefined && state.ha.input[tankOut.haPress] <= (tankOut.warn) && dd.state.warnTankLow == false) {
-                            log(dd.cfg.name + " - " + tankOut.name + " is lower than expected (" + state.ha.input[tankOut.haPress]
-                                + tankOut.unit + ") - possible hardware failure or low performance", 2, 2);
-                            dd.state.warnTankLow = true;
-                        }
-                        break;
-                    case false:  // when auto is OFFLINE
-                        if (dd.state.pumpOffTimeout == true) {
-                            if (pumpHA == true) {
-                                log(dd.cfg.name + " - is out of sync - auto is off but pump is on - switching auto ON", 2, 2);
-                                sendData(cfg.input.ha[dd.cfg.haAuto], 'input_boolean', 'turn_on');
-                                state.ha.input[dd.cfg.haAuto] = true;
-                                pumpStart();
-                                return;
+                                    break
                             }
-                            if (flow != undefined && flow.lm > dd.cfg.flowStartMin && dd.state.warnFlowFlush == false) {
-                                dd.state.warnFlowFlush = true;
-                                log(dd.cfg.name + " - flow is detected (" + flow.lm.toFixed(1) + " possible sensor damage or flush operation", 2, 3);
-                                return;
-                            }
-                        }
-                        break;
-                }
-                if (state.ha.input[tankOut.haPress] >= (tankOut.full + .12) && dd.state.faultOverflow == false) {
-                    log(dd.cfg.name + " - " + tankOut.name + " is overflowing (" + state.ha.input[tankOut.haPress]
-                        + tankOut.unit + ") - possible SSR or hardware failure", 2, 3);
-                    dd.state.faultOverflow = true;
-                }
-                if (dd.state.listener == false) {
-                    //     log("setting listener: " + x)
-                    em.on(cfg.input.ha[dd.cfg.haAuto], function (data) {
-                        switch (data) {
-                            case true:
-                                log(dd.cfg.name + " - is going ONLINE", 2);
-                                state.ha.input[dd.cfg.haAuto] = true;
-                                dd.state.faultFlow = false;
-                                dd.state.faultFlowRestarts = 0;
-                                return;
-                            case false:
-                                log(dd.cfg.name + " - is going OFFLINE - pump is stopping", 2);
-                                state.ha.input[dd.cfg.haAuto] = false;
-                                dd.state.faultFlowCancel = true;
+                            break;
+                        case true:      // when pump is RUNNING
+                            if (state.ha.input[tankOut.haPress] >= tankOut.full) {
+                                if (flow != undefined) {
+                                    let tFlow = flow.temp - flow.batch;
+                                    log(dd.cfg.name + " - " + tankOut.name
+                                        + " is full - pump is stopping - pumped " + tFlow.toFixed(1) + " m3", 2);
+                                } else { log(dd.cfg.name + " - " + tankOut.name + " is full - pump is stopping", 2); }
                                 pumpStop();
                                 return;
-                        }
-                        return;
-                    });
-                    dd.state.listener = true;
-                    return;
-                }
-                function pumpStart(send) {
-                    if (flow != undefined) { flow.batch = flow.temp; }
-                    dd.state.faultFlowCancel = false;
-                    dd.state.faultFlow = false;
-                    dd.state.pump = true;
-                    dd.state.pumpFlowCheck = false;
-                    dd.state.pumpFlowCheckPassed = false;
-                    setTimeout(() => {
-                        //    log(dd.cfg.name + " - checking pump flow", 2);
-                        dd.state.pumpFlowCheck = true;
-                        auto[0]();
-                    }, dd.cfg.flowCheckWait * 1000);
-                    dd.state.sendRetries = 0;
-                    if (send) sendData(cfg.input.ha[dd.cfg.haPump], 'switch', 'turn_on');
-                }
-                function pumpStop() {
-                    dd.state.pumpOffTimeout = false;
-                    dd.state.pump = false;
-                    pumpHA = false
-                    sendData(cfg.input.ha[dd.cfg.haPump], 'switch', 'turn_off');
-                    setTimeout(() => { dd.state.pumpOffTimeout = true }, 10e3);
-                }
-                function sendData(name, type, toggle) {
-                    let timeSend = new Date().getMilliseconds();
-                    let timeFinish = undefined;
-                    hass.services.call(toggle, type, { entity_id: name })
-                        .then(data => {
-                            timeFinish = new Date().getMilliseconds();
-                            if (dd.state.warnHAlag == true)
-                                log(dd.cfg.name + " - HA Lagging, reply time: " + (timeFinish - timeSend), 2, 2);
-                            dd.state.warnHAlag = false;
-                        })
-                    setTimeout(() => {
-                        if (timeFinish == undefined) {
-                            if (dd.state.sendRetries == 0)
-                                log(dd.cfg.name + " - HA is taking a long time to respond to command", 2, 2);
-                            dd.state.warnHAlag = true;
-                            setTimeout(() => {
-                                if (timeFinish == undefined) {
-                                    if (dd.state.sendRetries < 5) {
-                                        dd.state.sendRetries++;
-                                        log(dd.cfg.name + " - HA never responded, retrying - attempt " + dd.state.sendRetries, 2, 2);
-                                        sendData(name, type, toggle);
-                                    } else {
-                                        log(dd.cfg.name + " - HA never responded, all attempts failed, giving up", 2, 3);
+                            }
+                            if (dd.state.pumpFlowCheck == true && flow != undefined) {
+                                if (flow.lm < dd.cfg.flowStartMin) {
+                                    pumpStop();
+                                    dd.state.faultFlow = true;
+                                    if (dd.state.faultFlowRestarts < 3) {
+                                        log(dd.cfg.name + " - flow check FAILED!! (" + flow.lm.toFixed(1) + "lm) HA Pump State: "
+                                            + pumpHA + " - waiting for retry " + (dd.state.faultFlowRestarts + 1), 2, 2);
+                                        dd.state.faultFlowRestarts++;
+                                        setTimeout(() => {
+                                            if (dd.state.faultFlowCancel == false) dd.state.faultFlow = false; log(dd.cfg.name + " - pump restating", 2);
+                                        }, dd.cfg.faultFlowRety * 1000);
+                                    } else if (dd.state.faultFlowRestarts == 3) {
+                                        log(dd.cfg.name + " - low flow (" + flow.lm.toFixed(1) + "lm) HA State: "
+                                            + pumpHA + " - retries exceeded - going offline for " + dd.cfg.faultFlowFinal + "m", 2, 3);
+                                        dd.state.faultFlowRestarts++;
+                                        setTimeout(() => {
+                                            if (dd.state.faultFlowCancel == false) dd.state.faultFlow = false; log(dd.cfg.name + " - pump restating", 2);
+                                        }, dd.cfg.faultFlowFinal * 60 * 1000);
+                                    }
+                                    else {
+                                        dd.state.faultFlowRestarts++;
+                                        log(dd.cfg.name + " - low flow (" + flow.lm.toFixed(1) + "lm) HA State: "
+                                            + pumpHA + " - all retries failed - going OFFLINE permanently", 2, 3);
+                                        sendData(cfg.input.ha[dd.cfg.haAuto], 'input_boolean', 'turn_off');
+                                        state.ha.input[dd.cfg.haAuto] = false;
+                                    }
+                                } else {
+                                    if (dd.state.pumpFlowCheckPassed == false) {
+                                        log(dd.cfg.name + " - pump flow check PASSED (" + flow.lm.toFixed(1) + "lm)", 2);
+                                        dd.state.pumpFlowCheckPassed = true;
+                                        dd.state.faultFlowRestarts = 0;
+                                        if (flow.lm < dd.cfg.flowStartWarn && dd.state.warnFlowDaily == false) {
+                                            dd.state.warnFlowDaily = true;
+                                            log(dd.cfg.name + " - pump flow is lower than optimal (" + flow.lm.toFixed(1) + "lm) - clean filter", 2, 2);
+                                        }
                                     }
                                 }
-                            }, 400);
+                            }
+                            break;
+                    }
+                    if (dd.state.warnTankLow != undefined && state.ha.input[tankOut.haPress] <= (tankOut.warn) && dd.state.warnTankLow == false) {
+                        log(dd.cfg.name + " - " + tankOut.name + " is lower than expected (" + state.ha.input[tankOut.haPress]
+                            + tankOut.unit + ") - possible hardware failure or low performance", 2, 2);
+                        dd.state.warnTankLow = true;
+                    }
+                    break;
+                case false:  // when auto is OFFLINE
+                    if (dd.state.pumpOffTimeout == true) {
+                        if (pumpHA == true) {
+                            log(dd.cfg.name + " - is out of sync - auto is off but pump is on - switching auto ON", 2, 2);
+                            sendData(cfg.input.ha[dd.cfg.haAuto], 'input_boolean', 'turn_on');
+                            state.ha.input[dd.cfg.haAuto] = true;
+                            pumpStart();
+                            return;
                         }
-                    }, 100);
-                }
+                        if (flow != undefined && flow.lm > dd.cfg.flowStartMin && dd.state.warnFlowFlush == false) {
+                            dd.state.warnFlowFlush = true;
+                            log(dd.cfg.name + " - flow is detected (" + flow.lm.toFixed(1) + " possible sensor damage or flush operation", 2, 3);
+                            return;
+                        }
+                    }
+                    break;
             }
-        },
-    ],
+            if (state.ha.input[tankOut.haPress] >= (tankOut.full + .12) && dd.state.faultOverflow == false) {
+                log(dd.cfg.name + " - " + tankOut.name + " is overflowing (" + state.ha.input[tankOut.haPress]
+                    + tankOut.unit + ") - possible SSR or hardware failure", 2, 3);
+                dd.state.faultOverflow = true;
+            }
+            if (dd.state.listener == false) {
+                //     log("setting listener: " + x)
+                em.on(cfg.input.ha[dd.cfg.haAuto], function (data) {
+                    switch (data) {
+                        case true:
+                            log(dd.cfg.name + " - is going ONLINE", 2);
+                            state.ha.input[dd.cfg.haAuto] = true;
+                            dd.state.faultFlow = false;
+                            dd.state.faultFlowRestarts = 0;
+                            return;
+                        case false:
+                            log(dd.cfg.name + " - is going OFFLINE - pump is stopping", 2);
+                            state.ha.input[dd.cfg.haAuto] = false;
+                            dd.state.faultFlowCancel = true;
+                            pumpStop();
+                            return;
+                    }
+                    return;
+                });
+                dd.state.listener = true;
+                return;
+            }
+            function pumpStart(send) {
+                if (flow != undefined) { flow.batch = flow.temp; }
+                dd.state.faultFlowCancel = false;
+                dd.state.faultFlow = false;
+                dd.state.pump = true;
+                dd.state.pumpFlowCheck = false;
+                dd.state.pumpFlowCheckPassed = false;
+                setTimeout(() => {
+                    //    log(dd.cfg.name + " - checking pump flow", 2);
+                    dd.state.pumpFlowCheck = true;
+                    auto[0]();
+                }, dd.cfg.flowCheckWait * 1000);
+                dd.state.sendRetries = 0;
+                if (send) sendData(cfg.input.ha[dd.cfg.haPump], 'switch', 'turn_on');
+            }
+            function pumpStop() {
+                dd.state.pumpOffTimeout = false;
+                dd.state.pump = false;
+                pumpHA = false
+                sendData(cfg.input.ha[dd.cfg.haPump], 'switch', 'turn_off');
+                setTimeout(() => { dd.state.pumpOffTimeout = true }, 10e3);
+            }
+            function sendData(name, type, toggle) {
+                let timeSend = new Date().getMilliseconds();
+                let timeFinish = undefined;
+                hass.services.call(toggle, type, { entity_id: name })
+                    .then(data => {
+                        timeFinish = new Date().getMilliseconds();
+                        if (dd.state.warnHAlag == true)
+                            log(dd.cfg.name + " - HA Lagging, reply time: " + (timeFinish - timeSend), 2, 2);
+                        dd.state.warnHAlag = false;
+                    })
+                setTimeout(() => {
+                    if (timeFinish == undefined) {
+                        if (dd.state.sendRetries == 0)
+                            log(dd.cfg.name + " - HA is taking a long time to respond to command", 2, 2);
+                        dd.state.warnHAlag = true;
+                        setTimeout(() => {
+                            if (timeFinish == undefined) {
+                                if (dd.state.sendRetries < 5) {
+                                    dd.state.sendRetries++;
+                                    log(dd.cfg.name + " - HA never responded, retrying - attempt " + dd.state.sendRetries, 2, 2);
+                                    sendData(name, type, toggle);
+                                } else {
+                                    log(dd.cfg.name + " - HA never responded, all attempts failed, giving up", 2, 3);
+                                }
+                            }
+                        }, 400);
+                    }
+                }, 100);
+            }
+        }
+    },
+],
     user = {        // user configurable block
         timer: {    // these functions are called once every min,hour,day. Use time.min time.hour and time.day for comparison 
             everyMin: function () {
@@ -426,12 +328,12 @@ let
                     switch (msg.text) {
                         case "?": console.log("test help menu"); break;
                         case "/start": bot.sendMessage(msg.chat.id, "welcome back po"); break;
-                        case "R":   // to include uppercase letter for menu
+                        case "R":   // to include uppercase letter in case match
                         case "r":
                             bot.sendMessage(msg.from.id, "Remote Control Menu:")
                             setTimeout(() => {      // delay to ensure menu Title gets presented first in Bot channel
                                 for (let x = 0; x < cfg.dd.length; x++)  sys.telegram.button(msg, "dd", cfg.dd[x].name);    // iterate each DD system and create button
-                            }, 2);              //  sys.telegram.button(msg, "2 letter callback", "button name")   this create and send the button and assigns the callback below
+                            }, 2);
                             break;
                         case "1": em.emit(test[1][4], true); log("true", 0, 0); break;      // for testing of ESPhome API
                         case "2": em.emit(test[1][4], false); log("false", 0, 0); break;    // for testing of ESPhome API
@@ -445,21 +347,21 @@ let
                 let code = msg.data.slice(0, 2);
                 let data = msg.data.slice(2);
                 switch (code) {
-                    case "dd":      // two letter callback specified above in the Button function
-                        for (let x = 0; x < cfg.dd.length; x++) {   // read button input and toggle corresponding DD system
+                    case "dd":
+                        for (let x = 0; x < cfg.dd.length; x++) {   // read button input and toggle corisponding DD system
                             if (data == (cfg.dd[x].name + " on")) { toggleDD("on", x); break; }
                             if (data == (cfg.dd[x].name + " off")) { toggleDD("off", x); break; }
                         }
                         break;
                 }       // create a function for use with your callback
-                function toggleDD(newState, x) {    // function that reads the callback input and toggles corresponding boolean in Home Assistant
+                function toggleDD(newState, x) {    // function that reads the callback input and toggles corisponding boolean in Home Assistant
                     bot.sendMessage(msg.from.id, "pump " + cfg.dd[x].name + " " + newState);
                     hass.services.call("turn_" + newState, 'input_boolean', { entity_id: cfg.input.ha[cfg.dd[x].haAuto] })
                 }
             },
         },
     },
-    ha = {      // nothing to touch here
+    ha = {
         fetch: function () {
             fetch = state.ha.fetch;
             let sendDelay = 0;
@@ -678,7 +580,7 @@ let
             em.on('send', function (data) { socket.sendUTF(JSON.stringify(data)); });
         }
     },
-    sys = {     // nothing to touch here, except .sys.init.nv of want to initialize non-volatile mem on first load
+    sys = {
         boot: function (step) {
             switch (step) {
                 case 0:
@@ -796,7 +698,7 @@ let
                     log("telegram - user just joined the group - " + msg.from.first_name + " " + msg.from.last_name + " ID: " + msg.from.id, 0, 2);
                     nv.telegram.push(buf);
                     bot.sendMessage(msg.chat.id, 'registered');
-                    sys.fileWriteNV();
+                    sys.file.write.nv();
                 } else bot.sendMessage(msg.chat.id, 'already registered');
             },
             auth: function (msg) {
@@ -865,7 +767,7 @@ let
                 ha.calcFlow();
                 if (flowMeter) {
                     ha.calcFlowMeter();
-                    sys.fileWriteNV();
+                    sys.file.write.nv();
                 }
                 ha.push();
             },
@@ -1008,3 +910,4 @@ function log(message, mod, level) {
 let test = [    // for ESP Home testing
     [null, null, null, null, null, null, null, null,],
     [null, null, null, null, null, null, null, null,]
+]
