@@ -89,6 +89,102 @@ let
         }
     },
     auto = [    // automation function array to add your custom automation, called every time an incoming state change comes from Home Assistant
+        function () {   // example automation function 
+
+            /*
+                some general information:
+
+                Functions:
+                log("my string", numberOfYourModule, severity)      // 0 debug, 1 event, 2 warning, 3 error
+                                                                    // create an entry for your module name in the log() function at the end of this script
+                                                                    // logs to console and telegram at the level you specified if enabled 
+                time.stamp()        // returns a string  month-day-hour-min-sec-ms
+                sys.fileWriteNV()       // write non-volatile memory to the disk if you need store data there in   nv.MyFunctionData
+                                    // file is saved to the WorkingDir you specified/nv.json
+
+                incoming websocket data from home assistant:
+                    see below how to initialize your event listener. 
+                    every input/output from HA gets an emitter with the exact name in HA and its state
+                    you can see all the available entities  in the diag webpage using your IP and the port you specified
+
+                    http://10.0.0.1/ha      // all available HA entities
+                    http://10.0.0.1/ws      // history of that last 500 websocket updates
+                    http://10.0.0.1/state   // see all the volatile memory of your functions
+                    http://10.0.0.1/nv      // see all the non-volatile memory of your functions
+                    http://10.0.0.1/cfg     // see all the hard coded configs of your functions
+                    http://10.0.0.1/tg      // see last 500 incoming telegram messages
+                    http://10.0.0.1/log     // see last 500 log messages
+                    
+            */
+
+                    // if your automation function requires non-volatile memory, you must delete the nv.json file if it already exists and initialize the NV mem on first run using the sys.writeNV() function
+                    // or, do something like  if(nv.myFunction.myVar == undefined) nv.myFunction.myVar = true   then call  sys.fileWriteNV();
+
+
+                    // initialize the volatile memory for your automation function
+
+                    // for multi object system use like this, user DD system for example
+            /*
+            if (!state.myAutomation) {     
+                state.myAutomation = [];
+                cfg.myAutomation.forEach(element => {
+                    state.myAutomation.push({
+                        listeners:false, myVariable: false,
+                    })
+                });
+            }
+            */
+
+
+            // for single object system use like this
+      /*
+            if (!state.myAutomation) {     
+                state.myAutomation = {listeners:false, myVariable: false,};
+            }
+            */
+
+
+                        // initialize the HA input event listener for your automation function, receive the input data or parse
+            /*              
+                        if (state.myAutomation.listener == false) {  
+                            em.on(cfg.input.ha["my home assistant number here"], function (data) {
+                                switch (data) {
+                                    case true:
+                                        log(" - is going ONLINE");
+                                        performFunctionTrue();
+                                        return;
+                                    case false:
+                                        log(" - is going OFFLINE");
+                                        performFunctionFalse();
+                                        return;
+                                }
+                                return;
+                            });
+                            state.myAutomation.listener = true;
+                            return;
+                        }
+            */
+
+            // example to send data to home assistant within your function
+
+            /*  
+                //  example for switch
+                hass.services.call('turn_off', 'switch', { entity_id: cfg.input.ha[number of your input] })
+                .then(data => {   })                    // optional  -  do something after completion if you want
+                .catch(err => log(err)0,3)              // optional  -  catch and log error if you want
+
+                //  example for boolean
+                 hass.services.call('turn_on', 'input_boolean', { entity_id: cfg.input.ha[number of your input] })
+    
+                // example for sensor
+                hass.states.update('sensor', "any name of sensor you want to appear in ha", { state: myValue, attributes: { state_class: 'measurement', unit_of_measurement: "any unit you like" } })
+                
+                //  you can push a sensor here in your function or on an interval using the user.time.sec function or min if you want 
+        
+                */
+
+
+        },
         function () {   // Demand Delivery System
             if (!state.dd) {
                 state.dd = [];
@@ -300,103 +396,6 @@ let
                 }
             }
         },
-        function () {   // example automation function 
-
-            /*
-                some general information:
-
-                Functions:
-                log("my string", numberOfYourModule, severity)      // 0 debug, 1 event, 2 warning, 3 error
-                                                                    // create an entry for your module name in the log() function at the end of this script
-                                                                    // logs to console and telegram at the level you specified if enabled 
-                time.stamp()        // returns a string  month-day-hour-min-sec-ms
-                sys.fileWriteNV()       // write non-volatile memory to the disk if you need store data there in   nv.MyFunctionData
-                                    // file is saved to the WorkingDir you specified/nv.json
-
-                incoming websocket data from home assistant:
-                    see below how to initialize your event listener. 
-                    every input/output from HA gets an emitter with the exact name in HA and its state
-                    you can see all the available entities  in the diag webpage using your IP and the port you specified
-
-                    http://10.0.0.1/ha      // all available HA entities
-                    http://10.0.0.1/ws      // history of that last 500 websocket updates
-                    http://10.0.0.1/state   // see all the volatile memory of your functions
-                    http://10.0.0.1/nv      // see all the non-volatile memory of your functions
-                    http://10.0.0.1/cfg     // see all the hard coded configs of your functions
-                    http://10.0.0.1/tg      // see last 500 incoming telegram messages
-                    http://10.0.0.1/log     // see last 500 log messages
-                    
-            */
-
-                    // if your automation function requires non-volatile memory, you must delete the nv.json file if it already exists and initialize the NV mem on first run using the sys.writeNV() function
-                    // or, do something like  if(nv.myFunction.myVar == undefined) nv.myFunction.myVar = true   then call  sys.fileWriteNV();
-
-                    
-                    // initialize the volatile memory for your automation function
-
-                    // for multi object system use like this, user DD system for example
-            /*
-            if (!state.myAutomation) {     
-                state.myAutomation = [];
-                cfg.myAutomation.forEach(element => {
-                    state.myAutomation.push({
-                        listeners:false, myVariable: false,
-                    })
-                });
-            }
-            */
-
-
-            // for single object system use like this
-      /*
-            if (!state.myAutomation) {     
-                state.myAutomation = {listeners:false, myVariable: false,};
-            }
-            */
-
-
-                        // initialize the HA input event listener for your automation function, receive the input data or parse
-            /*              
-                        if (state.myAutomation.listener == false) {  
-                            em.on(cfg.input.ha["my home assistant number here"], function (data) {
-                                switch (data) {
-                                    case true:
-                                        log(" - is going ONLINE");
-                                        performFunctionTrue();
-                                        return;
-                                    case false:
-                                        log(" - is going OFFLINE");
-                                        performFunctionFalse();
-                                        return;
-                                }
-                                return;
-                            });
-                            state.myAutomation.listener = true;
-                            return;
-                        }
-            */
-
-            // example to send data to home assistant within your function
-
-            /*  
-                //  example for switch
-                hass.services.call('turn_off', 'switch', { entity_id: cfg.input.ha[number of your input] })
-                .then(data => {   })                    // optional  -  do something after completion if you want
-                .catch(err => log(err)0,3)              // optional  -  catch and log error if you want
-
-                //  example for boolean
-                 hass.services.call('turn_on', 'input_boolean', { entity_id: cfg.input.ha[number of your input] })
-    
-                // example for sensor
-                hass.states.update('sensor', "any name of sensor you want to appear in ha", { state: myValue, attributes: { state_class: 'measurement', unit_of_measurement: "any unit you like" } })
-                
-                //  you can push a sensor here in your function or on an interval using the user.time.sec function or min if you want 
-        
-                */
-
-
-        },
-
     ],
     user = {        // user configurable block
         timer: {    // these functions are called once every min,hour,day. Use time.min time.hour and time.day for comparison 
@@ -410,9 +409,9 @@ let
 
             },
         },
-        telegram: {                 // enter a case mathing your desireable input
+        telegram: { // enter a case matching your desireable input
             msg: function (msg) {
-                if (sys.tele.auth(msg)) {
+                if (sys.telegram.auth(msg)) {
                     switch (msg.text) {
                         case "?": console.log("test help menu"); break;
                         case "/start": bot.sendMessage(msg.chat.id, "welcome back po"); break;
@@ -420,14 +419,14 @@ let
                         case "r":
                             bot.sendMessage(msg.from.id, "Remote Control Menu:")
                             setTimeout(() => {      // delay to ensure menu Title gets presented first in Bot channel
-                                for (let x = 0; x < cfg.dd.length; x++)  sys.tele.button(msg, "dd", cfg.dd[x].name);    // iterate each DD system and create button
+                                for (let x = 0; x < cfg.dd.length; x++)  sys.telegram.button(msg, "dd", cfg.dd[x].name);    // iterate each DD system and create button
                             }, 2);
                             break;
                         case "1": em.emit(test[1][4], true); log("true", 0, 0); break;      // for testing of ESPhome API
                         case "2": em.emit(test[1][4], false); log("false", 0, 0); break;    // for testing of ESPhome API
                     }
                 }
-                else if (msg.text == config.telegram.password) sys.tele.sub(msg);
+                else if (msg.text == config.telegram.password) sys.telegram.sub(msg);
                 else if (msg.text == "/start") bot.sendMessage(msg.chat.id, "give me passcode");
                 else bot.sendMessage(msg.chat.id, "i dont know you, go away");
             },
@@ -436,13 +435,13 @@ let
                 let data = msg.data.slice(2);
                 switch (code) {
                     case "dd":
-                        for (let x = 0; x < cfg.dd.length; x++) {   // read button input and toggle corresponding DD system
+                        for (let x = 0; x < cfg.dd.length; x++) {   // read button input and toggle corisponding DD system
                             if (data == (cfg.dd[x].name + " on")) { toggleDD("on", x); break; }
                             if (data == (cfg.dd[x].name + " off")) { toggleDD("off", x); break; }
                         }
                         break;
                 }       // create a function for use with your callback
-                function toggleDD(newState, x) {    // function that reads the callback input and toggles corresponding boolean in Home Assistant
+                function toggleDD(newState, x) {    // function that reads the callback input and toggles corisponding boolean in Home Assistant
                     bot.sendMessage(msg.from.id, "pump " + cfg.dd[x].name + " " + newState);
                     hass.services.call("turn_" + newState, 'input_boolean', { entity_id: cfg.input.ha[cfg.dd[x].haAuto] })
                 }
@@ -551,7 +550,7 @@ let
             }
         },
         calcFlowMeter: function () {
-            sys.timeSync();
+            sys.time.sync();
             let calcFlow = 0, hour = 0, day = 0, hourNV = 0;
             for (let x = 0; x < cfg.flow.length; x++) {
                 if (state.flow[x].temp == undefined) state.flow[x].temp = nv.flow[x].total
@@ -675,7 +674,7 @@ let
                     sys.checkArgs();
                     console.log("Working Directory: " + config.workingDir);
                     log("initializing system states");
-                    sys.initState();
+                    sys.init.state();
                     fs.exists(config.workingDir + "nv.json", (exists) => {
                         if (exists) {
                             log("loading NV data...");
@@ -683,7 +682,7 @@ let
                         }
                         else {
                             log("initializing NV mem...");
-                            sys.initNV();
+                            sys.init.nv();
                             log("creating new NV file...");
                             fs.writeFileSync(config.workingDir + "nv.json", JSON.stringify(nv));
                         }
@@ -740,9 +739,9 @@ let
                     time.minLast = time.min;
                     time.hourLast = time.hour;
                     time.dayLast = time.day;
-                    sys.timerRegular(true);
+                    sys.time.interval(true);
                     ha.ws();
-                    setInterval(() => sys.timer(), 1000);
+                    setInterval(() => sys.time.timer(), 1000);
                     break;
             }
         },
@@ -779,10 +778,10 @@ let
                 entityNum = 0;
             }
         },
-        tele: {
+        telegram: {
             sub: function (msg) {
                 let buf = { user: msg.from.first_name + " " + msg.from.last_name, id: msg.from.id }
-                if (!sys.tele.auth(msg)) {
+                if (!sys.telegram.auth(msg)) {
                     log("telegram - user just joined the group - " + msg.from.first_name + " " + msg.from.last_name + " ID: " + msg.from.id, 0, 2);
                     nv.telegram.push(buf);
                     bot.sendMessage(msg.chat.id, 'registered');
@@ -808,91 +807,96 @@ let
                 })
             },
         },
-        timeSync: function () {
-            time.date = new Date();
-            time.ms = time.date.getMilliseconds();
-            time.sec = time.date.getSeconds();
-            time.min = time.date.getMinutes();
-            time.hour = time.date.getHours();
-            time.day = time.date.getDate();
-            time.month = time.date.getMonth();
-            time.stamp = ("0" + time.month).slice(-2) + "-" + ("0" + time.day).slice(-2) + " "
-                + ("0" + time.hour).slice(-2) + ":" + ("0" + time.min).slice(-2) + ":"
-                + ("0" + time.sec).slice(-2) + "." + ("00" + time.ms).slice(-3);
-            return time.stamp;
-        },
-        timer: function () {    // called every second
-            if (time.minLast != time.min) { time.minLast = time.min; everyMin(); }
-            sys.timerRegular();
-            function everyMin() {
-                if (time.hourLast != time.hour) { time.hourLast = time.hour; everyHour(); }
-                sys.timerRegular(true);
-                for (let x = 0; x < cfg.dd.length; x++) {
-                    state.dd[x].warnSensorFlush = false;
+        time: {
+            sync: function () {
+                time.date = new Date();
+                time.ms = time.date.getMilliseconds();
+                time.sec = time.date.getSeconds();
+                time.min = time.date.getMinutes();
+                time.hour = time.date.getHours();
+                time.day = time.date.getDate();
+                time.month = time.date.getMonth();
+                time.stamp = ("0" + time.month).slice(-2) + "-" + ("0" + time.day).slice(-2) + " "
+                    + ("0" + time.hour).slice(-2) + ":" + ("0" + time.min).slice(-2) + ":"
+                    + ("0" + time.sec).slice(-2) + "." + ("00" + time.ms).slice(-3);
+                return time.stamp;
+            },
+            timer: function () {    // called every second
+                if (time.minLast != time.min) { time.minLast = time.min; everyMin(); }
+                sys.time.interval();
+                function everyMin() {
+                    if (time.hourLast != time.hour) { time.hourLast = time.hour; everyHour(); }
+                    sys.time.interval(true);
+                    for (let x = 0; x < cfg.dd.length; x++) {
+                        state.dd[x].warnSensorFlush = false;
+                    }
+                    user.timer.everyMin();
                 }
-                user.timer.everyMin();
-            }
-            function everyHour() {
-                if (time.dayLast != time.day) { time.dayLast = time.day; everyDay(); }
-                for (let x = 0; x < cfg.dd.length; x++) {
-                    state.dd[x].faultOverflow = false;
-                    state.dd[x].warnTankLow = false;
-                    state.dd[x].warnFlowFlush = false;
+                function everyHour() {
+                    if (time.dayLast != time.day) { time.dayLast = time.day; everyDay(); }
+                    for (let x = 0; x < cfg.dd.length; x++) {
+                        state.dd[x].faultOverflow = false;
+                        state.dd[x].warnTankLow = false;
+                        state.dd[x].warnFlowFlush = false;
+                    }
+                    user.timer.everyHour();
                 }
-                user.timer.everyHour();
-            }
-            function everyDay() {
-                if (time.hour == 6) {
-                    for (let x = 0; x < cfg.dd.length; x++) { state.dd[x].warnFlowDaily = false; }
+                function everyDay() {
+                    if (time.hour == 6) {
+                        for (let x = 0; x < cfg.dd.length; x++) { state.dd[x].warnFlowDaily = false; }
+                    }
+                    user.timer.everyDay();
                 }
-                user.timer.everyDay();
-            }
+            },
+            interval: function (flowMeter) {
+                time.up++;
+                sys.time.sync();
+                ha.calcFlow();
+                if (flowMeter) {
+                    ha.calcFlowMeter();
+                    sys.fileWriteNV();
+                }
+                ha.push();
+            },
         },
-        timerRegular: function (flowMeter) {
-            time.up++;
-            sys.timeSync();
-            ha.calcFlow();
-            if (flowMeter) {
-                ha.calcFlowMeter();
-                sys.fileWriteNV();
-            }
-            ha.push();
-        },
-        initNV: function () {   // create NV placeholder data 
-            for (let x = 0; x < cfg.flow.length; x++) {
-                nv.flow.push({ total: 0, min: [], hour: [], day: [] })
-                for (let y = 0; y < 60; y++) nv.flow[x].min.push(0);
-                for (let y = 0; y < 24; y++) nv.flow[x].hour.push(0);
-                for (let y = 0; y < 30; y++) nv.flow[x].day.push(0);
-            }
-        },
-        initState: function () {  // initiate system volatile memory
-            for (let x = 0; x < cfg.flow.length; x++) {
-                state.flow.push({
-                    lm: 0,
-                    temp: undefined,
-                    hour: 0,
-                    day: 0,
-                    batch: 0
-                })
-            }
-            for (let x = 0; x < cfg.tank.length; x++) { state.tank.push(0) }
-            state.ha = {
-                input: [],
-                fetchBoot: false,
-                pushLast: [],
-                ws: {
-                    logStep: 0,
-                    error: false,
-                    id: 1,
-                    reply: true,
-                    pingsLost: 0,
-                    timeStart: 0,
-                },
-            }
-            for (let x = 0; x < cfg.input.ha.length; x++) { state.ha.input.push(0) }
-            state.esp = { discover: [], entities: [], connection: [] }
-            state.sys = { boot: false, logStepTG: 0, }
+        init: {
+            nv: function () {
+                for (let x = 0; x < cfg.flow.length; x++) {
+                    nv.flow.push({ total: 0, min: [], hour: [], day: [] })
+                    for (let y = 0; y < 60; y++) nv.flow[x].min.push(0);
+                    for (let y = 0; y < 24; y++) nv.flow[x].hour.push(0);
+                    for (let y = 0; y < 30; y++) nv.flow[x].day.push(0);
+                }
+            },
+            state: function () {  // initialize system volatile memory
+                for (let x = 0; x < cfg.flow.length; x++) {
+                    state.flow.push({
+                        lm: 0,
+                        temp: undefined,
+                        hour: 0,
+                        day: 0,
+                        batch: 0
+                    })
+                }
+                for (let x = 0; x < cfg.tank.length; x++) { state.tank.push(0) }
+                state.ha = {
+                    input: [],
+                    fetchBoot: false,
+                    pushLast: [],
+                    ws: {
+                        logStep: 0,
+                        error: false,
+                        id: 1,
+                        reply: true,
+                        pingsLost: 0,
+                        timeStart: 0,
+                    },
+                }
+                for (let x = 0; x < cfg.input.ha.length; x++) { state.ha.input.push(0) }
+                state.esp = { discover: [], entities: [], connection: [] }
+                state.sys = { boot: false, logStepTG: 0, }
+            },
+
         },
         checkArgs: function () {
             if (process.argv[2] == "-i") {
@@ -919,13 +923,17 @@ let
                 process.exit();
             }
         },
-        fileWriteNV: function () {  // write non-volatile memory to the disk
-            fs.writeFile(config.workingDir + "nv-bak.json", JSON.stringify(nv), function () {
-                fs.copyFile(config.workingDir + "nv-bak.json", config.workingDir + "nv.json", (err) => {
-                    if (err) throw err;
-                });
-            });
-        }
+        file: {
+            write: {
+                nv: function () {  // write non-volatile memory to the disk
+                    fs.writeFile(config.workingDir + "nv-bak.json", JSON.stringify(nv), function () {
+                        fs.copyFile(config.workingDir + "nv-bak.json", config.workingDir + "nv.json", (err) => {
+                            if (err) throw err;
+                        });
+                    });
+                }
+            },
+        },
     },
     time = { date: undefined, month: 0, day: 0, dayLast: undefined, hour: 0, hourLast: undefined, min: 0, minLast: undefined, sec: 0, up: 0, ms: 0, millis: 0, stamp: "" },
     state = { ha: [], flow: [], tank: [] },
@@ -956,7 +964,7 @@ function lib() {
         });
 }
 function log(message, mod, level) {
-    let buf = sys.timeSync();
+    let buf = sys.time.sync();
     if (level == undefined) level = 1;
     switch (level) {
         case 0: buf += "|--debug--|"; break;
@@ -965,7 +973,7 @@ function log(message, mod, level) {
         case 3: buf += "|!!ERROR!!|"; break;
         default: buf += "|  Event  |"; break;
     }
-    switch (mod) {          // add a case for your module name
+    switch (mod) {
         case 0: buf += " system | "; break;
         case 1: buf += "     HA | "; break;
         case 2: buf += "Delivery| "; break;
@@ -986,9 +994,6 @@ function log(message, mod, level) {
     }
     console.log(buf);
 }
-
-
 let test = [    // for ESP Home testing
     [null, null, null, null, null, null, null, null,],
     [null, null, null, null, null, null, null, null,]
-]
