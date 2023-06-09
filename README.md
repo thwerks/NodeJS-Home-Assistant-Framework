@@ -6,7 +6,7 @@
 
 I'll be blunt, Home Assistant isn't suitable for industrial applications or where malfunctions can lead to costly equipment damage. Furthermore, data manipulation and management is very cumbersome and difficult if even possible given a particular situation. The state management for certain conditions like startup, power loss, errors and other likely conditions is difficult to understand and control in HA. Withstanding, the HA GUI being only one of many options for monitoring and control mechanisms in the scheme of this framework makes it completely acceptable for use in an industrial setting. 
 
-Though Home Assistant may be reliable for some situations, using it for complex environments with multiple flow meters, pressure sensors, large motors and a multitude of inputs and outputs of that sort; it’s simply is not up to the task. It's not intended for that and that's fine but NodeJS can do this kind of thing easily.
+Though Home Assistant may be reliable for some situations, using it for complex environments with multiple flow meters, pressure sensors, large motors and a multitude of inputs and outputs of that sort; it is simply not up to the task. It's not intended for that and that's completely fine but NodeJS can do this kind of thing easily.
 
 I realize some people are not going to appreciate what im doing, aren't going to see the point, will not agree with anything I do or how I do it. If thats you, please understand that I'm obviously not doing this for you. I personally think using NodeJS for the heavy lifting and HA only for its GUI is a great idea, if that sounds like a good idea to you, great! If you don't think so, then just move along and have a wonderful day. 
 
@@ -28,7 +28,7 @@ The Key takeaway here is that the HA Core API responds on average in about 2-5ms
 * This framework is very simple and easy to use.
 * Rebooting of ether NodeJS or of HA has no detrimental effect for the most part. System recovery is controlled and predictable. 
 * At present, Home Assistant is still the gateway for ESPHome devices; meaning that HA is the subscriber and forwards incoming data to NodeJS via websocket. This will become optional when the NodeJS ESPHome API is fully incorporated, then NodeJS will be the sole subscriber and HA will only be used as a GUI.
-* It has a nice and simple to use logging function.
+* It has a nice and easy to use logging function.
 * Telegram API is leveraged here and can be used for both event notification as well as remote control. Useful because you can remotely control your system without VPN. You can easily create your own monitoring and control scheme.
 * There is a complete diagnostic web engine to aid in the setup and debugging of your code.
 * Has systemD service creator.  run   node ha.ja -i   to create your service when you got everything working.
@@ -53,8 +53,8 @@ If you're not interested in the Demand Delivery system, it should be very easy t
 * Tank levels are sent back to HA in percentage readout as dependent upon user configurations.
 * Flow meter data is sent back to HA for last hour and 24 hours average.
 * Input booleans in HA are used to toggle the pump automation system(s).
-* System looks for inconsistencies between HA and the NodeJS system brings the system back to consistency as based on specified parameters and live sensor data.
-* System keep track of HA latency and availability and notifies you if something is wrong.
+* System looks for inconsistencies between HA and the NodeJS system. It will bring the system back to consistency as based on specified parameters and live sensor data.
+* System keeps track of HA latency and availability and notifies you if something is wrong.
 * ESP Home modules are also monitored.
 
 # How to use this framework:
