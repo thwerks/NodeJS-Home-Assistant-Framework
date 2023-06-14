@@ -43,7 +43,7 @@ let
                 flowStartMin: 60,       // minimum flow rate pump must reach at start in LPM
                 flowStartWarn: 70,      // min start flow before triggering notification (useful for filters) (LPM)
                 flowCheckWait: 6,       // seconds to wait before checking flow after pump starts
-                faultFlowRety: 10,      // time in seconds to wait for retry
+                faultFlowRetry: 10,     // time in seconds to wait for retry
                 faultFlowFinal: 1,      // time in minutes to wait for final retry
             },
             {   // DD system 2 example
@@ -212,7 +212,7 @@ let
 
         },
         function () {   // Demand Delivery System
-            if (!state.dd) {    // initialize volatile function memory
+            if (!state.dd) {    // initialize function volatile memory
                 state.dd = [];
                 cfg.dd.forEach(element => {
                     state.dd.push({
@@ -289,7 +289,7 @@ let
                                             dd.state.faultFlowRestarts++;
                                             setTimeout(() => {
                                                 if (dd.state.faultFlowCancel == false) dd.state.faultFlow = false; log(dd.cfg.name + " - pump restating", 2);
-                                            }, dd.cfg.faultFlowRety * 1000);
+                                            }, dd.cfg.faultFlowRetry * 1000);
                                         } else if (dd.state.faultFlowRestarts == 3) {
                                             log(dd.cfg.name + " - low flow (" + flow.lm.toFixed(1) + "lm) HA State: "
                                                 + pumpHA + " - retries exceeded - going offline for " + dd.cfg.faultFlowFinal + "m", 2, 3);
@@ -989,7 +989,7 @@ function lib() {
             ignoreCert: true
         });
 }
-function log(message, mod, level) {
+function log(message, mod, level) {      // add a new case with the name of your automation function
     let buf = sys.time.sync();
     if (level == undefined) level = 1;
     switch (level) {
@@ -999,7 +999,7 @@ function log(message, mod, level) {
         case 3: buf += "|!!ERROR!!|"; break;
         default: buf += "|  Event  |"; break;
     }
-    switch (mod) {
+    switch (mod) {      // add a new case with the name of your automation function, starting at case 3
         case 0: buf += " system | "; break;
         case 1: buf += "     HA | "; break;
         case 2: buf += "Delivery| "; break;
