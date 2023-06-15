@@ -118,15 +118,15 @@ let
                     every input/output from HA gets an emitter with the exact name in HA and its state.
                     You can see all the available entities in the diag webpage using your IP and the port you specified
 
-                    http://10.0.0.1/ha      // all available HA entities <-----------------
+                    http://10.0.0.1:200/ha      // all available HA entities <-----------------
 
                                     // other debugging/diag locations 
-                    http://10.0.0.1/ws      // history of that last 500 websocket updates
-                    http://10.0.0.1/state   // see all the volatile memory of your functions
-                    http://10.0.0.1/nv      // see all the non-volatile memory of your functions
-                    http://10.0.0.1/cfg     // see all the hard coded configs of your functions
-                    http://10.0.0.1/tg      // see last 500 incoming telegram messages
-                    http://10.0.0.1/log     // see last 500 log messages
+                    http://10.0.0.1:200/ws      // history of that last 500 websocket updates
+                    http://10.0.0.1:200/state   // see all the volatile memory of your functions
+                    http://10.0.0.1:200/nv      // see all the non-volatile memory of your functions
+                    http://10.0.0.1:200/cfg     // see all the hard coded configs of your functions
+                    http://10.0.0.1:200/tg      // see last 500 incoming telegram messages
+                    http://10.0.0.1:200/log     // see last 500 log messages
                     
             */
 
@@ -724,7 +724,7 @@ let
                             var serverWeb = express.listen(config.webDiagPort, function () { log("diag web server starting on port " + config.webDiagPort, 0); });
                         }
                         if (config.telegram.token != undefined && config.telegram.token != "") {
-                            log("starting Telegram service...")
+                            log("starting Telegram service...");
                             bot.on('message', (msg) => {
                                 if (logs.tg[state.sys.logStepTG] == undefined) logs.tg.push(msg);
                                 else logs.tg[state.sys.logStepTG] = msg;
