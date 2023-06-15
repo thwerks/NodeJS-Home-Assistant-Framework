@@ -1,17 +1,19 @@
 ### Install Docker, Home Assistan Core and ESP Home
-
+```
 sudo apt-get install -y jq wget curl avahi-daemon udisks2 libglib2.0-bin network-manager dbus docker-compose  
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
 sudo service docker start
+```
 
-
+### Make dirs and create Docker Compose file
+```
 mkdir ./apps/ha 
 cd ./apps/ha
 nano ./docker-compose.yml
+```
 
-
-#paste this yaml into the docker-compose.yml file
+### paste this yaml into the docker-compose.yml file
 
 ```
 version: '3'
@@ -44,6 +46,6 @@ services:
 
 `docker compose up -d`
 
-start ESPHome daskboard on deman with 
+### start ESPHome daskboard on deman with 
 
-docker run --rm --net=host -v "${PWD}":/config -it ghcr.io/esphome/esphome
+`docker run --rm --net=host -v "${PWD}":/config -it ghcr.io/esphome/esphome`
