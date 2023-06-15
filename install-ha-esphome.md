@@ -13,7 +13,7 @@ nano ./docker-compose.yml
 
 #paste this yaml into the docker-compose.yml file
 
-
+```
 version: '3'
 services:
   homeassistant:
@@ -38,7 +38,7 @@ services:
       - /dev/ttyUSB0:/dev/ttyACM0
     ports:
       - 80:6052
-
+```
 # change port 80 to port you want to use for ESPHome Dashboard or remove the "ports" code block and uncomment network_mode: host to use default port of 6052
 
 # then run docker compose    
