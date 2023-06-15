@@ -2,7 +2,7 @@
 let config = {
     espEnabled: false,                  // enable Node ESP Home API
     webDiag: true,                      // enable debug web server
-    webDiagPort: 80,                    // debug web server port number
+    webDiagPort: 200,                    // debug web server port number
     workingDir: "/apps/ha",             // specify the working director for non-volatile data storage
     homeAssistant: {
         address: "10.20.2.136",         // pretty straight forward 
@@ -16,7 +16,7 @@ let config = {
         enable: true,                   // enable telegram notification
         remote: true,                   // enable telegram remote control
         password: "test",               // password to register user ID with telegram bot
-        loglevel: 2,                    // 0: debug, 1: event, 2: warning, 3: error
+        logLevel: 2,                    // 0: debug, 1: event, 2: warning, 3: error
         logDebug: true,                 // logging debug override 
         token: "myToken"                // Telegram Bot token
     },
@@ -266,7 +266,7 @@ let
                                                 return;
                                             }
                                         }
-                                        break
+                                        break;
                                 }
                                 break;
                             case true:      // when pump is RUNNING
@@ -387,7 +387,7 @@ let
                 function pumpStop() {
                     dd.state.pumpOffTimeout = false;
                     dd.state.pump = false;
-                    pumpHA = false
+                    pumpHA = false;
                     sendData(cfg.input.ha[dd.cfg.haPump], 'switch', 'turn_off');
                     setTimeout(() => { dd.state.pumpOffTimeout = true }, 10e3);
                 }
@@ -582,7 +582,7 @@ let
                 if (state.flow[x].temp == undefined) state.flow[x].temp = nv.flow[x].total
                 if (state.flow[x].temp != nv.flow[x].total) {
                     calcFlow = nv.flow[x].total - state.flow[x].temp;
-                    state.flow[x].temp = nv.flow[x].total
+                    state.flow[x].temp = nv.flow[x].total;
                 }
                 nv.flow[x].min[time.min] = calcFlow;
 
@@ -1010,8 +1010,8 @@ function log(message, mod, level) {      // add a new case with the name of your
     else logs.sys[logs.step] = buf;
     if (logs.step < 500) logs.step++; else logs.step = 0;
     if (config.telegram.enable == true) {
-        if (level >= config.telegram.loglevel
-            || config.telegram.loglevel == 0 && config.telegram.logDebug == true) {
+        if (level >= config.telegram.logLevel
+            || config.telegram.logLevel == 0 && config.telegram.logDebug == true) {
             for (let x = 0; x < nv.telegram.length; x++) {
                 bot.sendMessage(nv.telegram[x].id, buf);
             }
