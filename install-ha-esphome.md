@@ -46,6 +46,6 @@ services:
 
 `docker compose up -d`
 
-### Start ESPHome daskboard on deman with 
+### Start ESPHome daskboard on demand with 
 
 `docker run --rm --net=host -v "${PWD}":/config -it ghcr.io/esphome/esphome`
