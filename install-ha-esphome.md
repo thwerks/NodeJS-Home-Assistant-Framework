@@ -1,4 +1,4 @@
-Install Docker, Home Assistan Core and ESP Home
+### Install Docker, Home Assistan Core and ESP Home
 
 sudo apt-get install -y jq wget curl avahi-daemon udisks2 libglib2.0-bin network-manager dbus docker-compose  
 curl -fsSL https://get.docker.com -o get-docker.sh
@@ -39,11 +39,10 @@ services:
     ports:
       - 80:6052
 ```
-# change port 80 to port you want to use for ESPHome Dashboard or remove the "ports" code block and uncomment network_mode: host to use default port of 6052
+* change port 80 to port you want to use for ESPHome Dashboard or remove the "ports" code block and uncomment network_mode: host to use default port of 6052
+* then run docker compose    
 
-# then run docker compose    
-
-docker compose up -d
+`docker compose up -d`
 
 start ESPHome daskboard on deman with 
 
