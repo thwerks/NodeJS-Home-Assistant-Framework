@@ -1,4 +1,4 @@
-esphome:
+esphome: 
   name: esp-filter
   friendly_name: ESP-Filter
 esp32:
