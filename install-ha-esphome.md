@@ -1,4 +1,4 @@
-### Install Docker, Home Assistan Core and ESP Home:
+### Install Docker, Home Assistant Core and ESP Home:
 ```
 sudo apt-get install -y jq wget curl avahi-daemon udisks2 libglib2.0-bin network-manager dbus docker-compose  
 curl -fsSL https://get.docker.com -o get-docker.sh
