@@ -2,7 +2,7 @@
 let config = {
     espEnabled: false,                  // enable Node ESP Home API
     webDiag: true,                      // enable debug web server
-    webDiagPort: 200,                    // debug web server port number
+    webDiagPort: 200,                   // debug web server port number
     workingDir: "/apps/ha",             // specify the working director for non-volatile data storage
     homeAssistant: {
         address: "10.20.2.136",         // pretty straight forward 
