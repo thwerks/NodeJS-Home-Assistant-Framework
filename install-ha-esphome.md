@@ -8,8 +8,8 @@ sudo service docker start
 
 ### Make dirs and create Docker Compose file:
 ```
-mkdir ./apps/ha 
-cd ./apps/ha
+mkdir /apps/ha -p
+cd /apps/ha
 nano ./docker-compose.yml
 ```
 
