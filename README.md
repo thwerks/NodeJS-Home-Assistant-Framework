@@ -8,9 +8,6 @@ I'll be blunt, Home Assistant isn't suitable for industrial applications or wher
 
 Though Home Assistant may be reliable for some situations, using it for complex environments with multiple flow meters, pressure sensors, large motors and a multitude of inputs and outputs of that sort; it is simply not up to the task. It's not intended for that and that's completely fine but NodeJS can do this kind of thing easily.
 
-I realize some people are not going to appreciate what im doing, aren't going to see the point, will not agree with anything I do or how I do it. If thats you, please understand that I'm obviously not doing this for you. I personally think using NodeJS for the heavy lifting and HA only for its GUI is a great idea, if that sounds like a good idea to you, great! If you don't think so, then just move along and have a wonderful day. 
-
-
 # What is this framework for:
 
 This framework is built to give you a head start on using NodeJS for making reliable and complex automations while only leveraging Home Assistant for it's nice and robust web and smartphone GUI. 
