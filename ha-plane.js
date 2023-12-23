@@ -27,19 +27,13 @@ let
         /*
         myAutomation: {
 
-
         };
-
-
         */
         dd: [       // config for the Demand/Delivery automation function, 1 object for each pump system
-
         ],
         tank: [     // config for tanks used with Home Assistant -- these tanks get sent back to HA as sensors
-
         ],
         flow: [      // config for flow meters used with Home Assistant -- these flow meters get sent back to HA as sensors
-
         ],
         io: {    // home assistant inputs you want to utilize here
             ha: [  // exact name of HA switch, sensor or input - check http://10.0.0.1:200/ha to see what's available in HA
