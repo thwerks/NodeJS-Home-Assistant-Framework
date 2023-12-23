@@ -7,7 +7,7 @@ let config = {
     homeAssistant: {
         address: "10.10.1.249",         // IP address of Home Assistant Server
         port: 8123,                     // HA port
-        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI4NWY4NDI3M2IzMjA0MTkxYjQ4YTBkNTZiMWJhYzFkMSIsImlhdCI6MTcwMzM3NzQyMiwiZXhwIjoyMDE4NzM3NDIyfQ.rP9t7qWTo3wKeAWBryklfyTtI4Rj4KTJdlSalWbkQr4",               // HA long lived Token - generate this in your HA user profile settings
+        token: "token",                 // HA long lived Token - generate this in your HA user profile settings
         log: {
             espDisconnect: false        // log ESP disconnect warning notifications
         }
@@ -18,7 +18,7 @@ let config = {
         password: "test",               // password to register user ID with telegram bot
         logLevel: 2,                    // 0: debug, 1: event, 2: warning, 3: error
         logDebug: true,                 // logging debug override 
-        token: "6001129337:AAFtm-xj1seANYdfbneJEktju1X0x2tqGmU"                // Telegram Bot token
+        token: "token"                  // Telegram Bot token
     },
 };
 lib();  // load package dependencies 
