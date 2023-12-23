@@ -32,7 +32,7 @@ The Key takeaway here is that the HA Core API responds on average in about 2-5ms
 
 # About the included Demand/Delivery pump automation function:
 
-This is a fully automated industrial multi-system multi-pump control platform and the main purpose of this creation. It is currently in service and works reliably in large industrial applications delivering 100,000+ liters per day. Soon to be deployed to a huge solar pump facility with 160hp pumps. Ok, so this is a working industrial system and has proven itself. 
+This is a fully automated industrial multi-system multi-pump control platform and the main purpose of this creation. It is currently in service and works reliably in large industrial applications delivering 100,000+ liters per day. Soon to be deployed to a huge solar pump facility with 160hp pumps. This is a working industrial system and has proven itself. 
 
 If you're not interested in the Demand Delivery system, it should be very easy to remove it and the configuration. Try it, if you can do it ill have a look, maybe fork a version without that. 
 
