@@ -41,6 +41,7 @@ services:
     ports:
       - 80:6052
 ```
+* Remove the `esphome` codeblock if you only need Home Assistant Core
 * Change port 80 to port you want to use for ESPHome Dashboard or remove the "ports" code block and uncomment network_mode: host to use default port of 6052
 * Then run docker compose    
 
