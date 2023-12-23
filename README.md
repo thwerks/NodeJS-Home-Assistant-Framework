@@ -4,9 +4,9 @@
 
 ## Preamble 
 
-I'll be blunt, Home Assistant isn't suitable for industrial applications or where malfunctions can lead to costly equipment damage. Furthermore, data manipulation and management is very cumbersome and difficult if even possible given a particular situation. The state management for certain conditions like startup, power loss, errors and other likely conditions is difficult to understand and control in HA. Withstanding, the HA GUI being only one of many options for monitoring and control mechanisms in the scheme of this framework makes it completely acceptable for use in an industrial setting. 
+I'll be blunt, Home Assistant isn't suitable for industrial applications or where malfunctions can lead to costly equipment damage. Furthermore, data manipulation and management is very cumbersome and difficult if even possible given a particular situation. The state management for certain conditions like startup, power loss, errors and other likely conditions is difficult to understand and control in HA, its also very slow to react to inputs. Withstanding, the HA GUI works very well as a monitoring and control mechanism in the scheme of this framework 
 
-Though Home Assistant may be reliable for some situations, using it for complex environments with multiple flow meters, pressure sensors, large motors and a multitude of inputs and outputs of that sort; it is simply not up to the task. It's not intended for that and that's completely fine but NodeJS can do this kind of thing easily.
+Though Home Assistant may be reliable for some situations, using it for complex environments with multiple flow meters, pressure sensors, large motors and a multitude of inputs and outputs of that sort; it is simply not up to the task. It's not intended for that but NodeJS can do this effortlessly.
 
 # What is this framework for:
 
