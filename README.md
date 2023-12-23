@@ -4,15 +4,15 @@
 
 ## Preamble 
 
-I'll be blunt, Home Assistant isn't suitable for industrial applications or where malfunctions can lead to costly equipment damage. Furthermore, data manipulation and management is very cumbersome and difficult if even possible given a particular situation. The state management for certain conditions like startup, power loss, errors and other likely conditions is difficult to understand and control in HA, its also very slow to react to inputs. Withstanding, the HA GUI works very well as a monitoring and control mechanism in the scheme of this framework 
+I'll be blunt, Home Assistant isn't suitable for industrial applications or where malfunctions can lead to costly equipment damage. Furthermore, data manipulation and management is very cumbersome and difficult if its even possible at all. The state management for certain conditions like startup, power loss, errors and other likely conditions is difficult to understand and control in HA, its also very slow to react to inputs and lags. Withstanding, the HA has a very nice GUI and works very well as a monitoring and control mechanism in the scheme of this framework. 
 
-Though Home Assistant may be reliable for some situations, using it for complex environments with multiple flow meters, pressure sensors, large motors and a multitude of inputs and outputs of that sort; it is simply not up to the task. It's not intended for that but NodeJS can do this effortlessly.
+Though Home Assistant may be reliable for some situations, using it for complex environments with multiple flow meters, pressure sensors, large motors and a multitude of inputs and outputs of that sort; it is simply not up to the task. It's not intended for that but NodeJS can do this effortlessly. 
 
 # What is this framework for:
 
-This framework is built to give you a head start on using NodeJS for making reliable and complex automations while only leveraging Home Assistant for it's nice and robust web and smartphone GUI. 
+This framework is built to leverage HA's powerful GUI, Smartphone apps and monitoring capabilities for you own NodeJS automations. To use NodeJS for the heavy lifting, data manipulation and communication. This is a lot more reliable, flexable and responsive than using Home Assistant for such complex tasks. Id also argue that its a lot simpler to code a basic logic in JS than it is using the GUI or YAML provided foundation is there.  
 
-I’d also mention that this solution is very compact and resource efficient especially when running Home Assistant Core. 500Mb of ram is enough for stable operation and that didn’t seem to be the case with Supervised installs while it was performing all the automation; @1GB of ram it crashed regularly. ESP Home web interface easily installs alongside HA Core. This is a very tiny and efficient platform that works very well on mediocre IoT devices with only 1GB of RAM.
+I’d also mention that this solution is very compact and resource efficient especially when running Home Assistant Core. 500Mb of ram is enough for stable operation and that didn’t seem to be the case with Home Assistant Supervised. While testing it performing all the automation, with @1GB of ram it crashed regularly. ESP Home web interface easily installs alongside HA Core. This is a very tiny and efficient platform that works very well on mediocre IoT devices with only 1GB of RAM.
 
 The Key takeaway here is that the HA Core API responds on average in about 2-5ms and never times out whereas Supervised can have latency exceeding 100ms and can become completely unreachable for seconds or even minutes or completely crash and not come back without a reboot. Probably due to costly background updates of plugins etc and memory overflows. Do not use Supervised if you need reliable time-critical operation. 
 
