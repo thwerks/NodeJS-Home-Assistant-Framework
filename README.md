@@ -61,7 +61,7 @@ If you're not interested in the Demand Delivery system, it should be very easy t
 * Please consult the ha.js file for instruction and submit an Issue if you have a question so others can benefit from the discussion.
 ### * For creating your own automation function, see the example function in the "auto" function array code block.
 * For using the Demand Delivery module, see the example configurations description.
-* Suggestions and ideas are welcome but please refrain from semantical or techno-philosophic preferential ranting or otherwise self-perfectionist jabbing. Don't clutter my github with that, this is a place for sharing of ideas a learning to be a better and more effective engineer. App programmers and machine  programmers have very different approaches to programming for very different reasons and will never agree with one another. If your an application programmer just keep your comments to yourself.
+* Suggestions and ideas are welcome, this is a place for sharing of ideas a learning to be a better and more effective engineer.
 * Install as a service using PM2 or the included SystemD installer, run   node ha.ja -i
 
 # Diagnostic/debugging web access: (use Firefox for pretty JSON formatting)
