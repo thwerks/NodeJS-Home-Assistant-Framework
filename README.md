@@ -55,7 +55,7 @@ If you're not interested in the Demand Delivery system, it should be very easy t
 * ESP Home modules are also monitored.
 
 # How to use this framework:
-* Please refer to the Getting Started Guide
+* Please refer to the Getting Started Guide https://github.com/thwerks/NodeJS-Home-Assistant-Framework/blob/main/Getting%20Started.md
   
 ### * For creating your own automation function, see the example function in the "auto" function array code block.
 * For using the Demand Delivery module, see the example configurations description.
