@@ -1,7 +1,7 @@
 
 
 ## Global Functions
-- Logger - `log("string", moduleID, severity)` fggghh 
+- Logger - `log("string", moduleID, severity)`  
   - You need to add an entry in the module name list for your automation.
   - <img src= "https://github.com/thwerks/NodeJS-Home-Assistant-Framework/assets/90361336/ece9e675-f46d-456a-b32c-1ad5b6871042" width="500">
 - Time stamp `sys.time.sync()`
