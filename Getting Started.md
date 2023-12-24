@@ -38,7 +38,7 @@
 - there are multiple ways to read and write data between Home Assistant and this framework.
 - in some cases the features of multiple home assistant APIs (namely legacy homeassistant and websocket) are used in combination to produce a complete system.  
 - they have different uses so pay close attention.
-### Legacy `homeassistant` NodeJS API, `cfg.io.ha` array and intergrated functions
+### Legacy `homeassistant` NodeJS API, `cfg.io.ha` array and `ha.fetch()` function
 - Fundamentals:
   - You will need enter all of the Home Assistant entities you will read or write into the `cfg.io.ha` string array.
   - This is used by the HA/NodeJS framework to indentify relevant entities and store their state.
@@ -97,3 +97,23 @@
               }
             })
            ```
+   - Registering an Emiiter to trigger functions inside your Automation Function
+     - ```
+       em.on(cfg.io.ha[0], function (data) {
+          switch (data) {
+                        case true:
+                            log(" - log something... Turn ON");
+                            return;
+                        case false:
+                            log(" - log something... OFFLINE");
+                            return;
+                    }
+                    return;
+                });
+       ```
+     - the `cfg.io.ha[0]` refers to whichever HA entity you want to subscribe to. Alternativly you could just put the entities name. 
+     - This emiiter subscription should only be ran once the first time your Automatino Function Runs
+     - The return statements are necessary to prevent further processing of you automation function until data is receive and precessed.  
+  
+
+     - talk about automation function processing as based on ws events
