@@ -30,6 +30,13 @@
     - <img src= "https://github.com/thwerks/NodeJS-Home-Assistant-Framework/assets/90361336/f0a81292-2aba-4311-a5ef-9d5b040a4d4d" width="600">
   - enter the IP address and API token into the `ha-plain.js` config
     - ![image](https://github.com/thwerks/NodeJS-Home-Assistant-Framework/assets/90361336/272da4b7-ec6d-4241-a3e0-a1f0ed7dfa76)
+  - Install necessary NPM packages
+    - npm install homeassistant
+    - npm install express
+    - npm install websocket
+    - If ESP or Telegram are Enabled:
+      - npm install @2colors/esphome-native-api
+      - npm install node-telegram-bot-api
   - now run the script, it should spit out all the entities available in Home Assistant and the exit
     - ![image](https://github.com/thwerks/NodeJS-Home-Assistant-Framework/assets/90361336/331b8541-465c-4543-a588-28977b6ec8e5)
     - ![image](https://github.com/thwerks/NodeJS-Home-Assistant-Framework/assets/90361336/51cea2cf-9d71-4260-90e5-dfde7e8455ab)
