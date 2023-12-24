@@ -55,10 +55,8 @@ If you're not interested in the Demand Delivery system, it should be very easy t
 * ESP Home modules are also monitored.
 
 # How to use this framework:
-
-* Getting stated NPM install necessary packages: node-telegram-bot-api (this actually installs all other necessary packages).
-* next, set your token, ip and things for HA, then run the script and have a look at  http:/127.0.0.1/ha  and get the names of all the discovered HA inputs you want to add, then put the into  cfg.input.ha  object.
-* Please consult the ha.js file for instruction and submit an Issue if you have a question so others can benefit from the discussion.
+* Please refer to the Getting Started Guide
+  
 ### * For creating your own automation function, see the example function in the "auto" function array code block.
 * For using the Demand Delivery module, see the example configurations description.
 * Suggestions and ideas are welcome, this is a place for sharing of ideas a learning to be a better and more effective engineer.
