@@ -1,29 +1,3 @@
-
-
-## Global Functions
-- Logger - `log("string", moduleID, severity)`  
-  - You need to add an entry in the module name list for your automation.
-  - <img src= "https://github.com/thwerks/NodeJS-Home-Assistant-Framework/assets/90361336/ece9e675-f46d-456a-b32c-1ad5b6871042" width="500">
-- Time stamp `sys.time.sync()`
-  - gets current time and returns a string `mm-dd hh:mm:ss.mil`
-- Write non-volatile memory to the disk `sys.file.write.nv()`
-  - If your automation function requires non-volatile memory, you must create an object in the `nv` object for your function and then call the `sys.file.write.nv()` function to initialize and save your data.
-  - Do something like: `if (nv.myFunction == undefined) nv.myFunction = {}` true then call `sys.file.write.nv();`
-- User Available Timer `user.timer` code block
-  - execute any function at any time you specify
-  - ![image](https://github.com/thwerks/NodeJS-Home-Assistant-Framework/assets/90361336/98dab905-7bfc-4c92-9fc0-792361a1feaa)
- ## Diag Web Interface 
-- Look at all data in corrisponding memory space.
-  - use firefox for pretty JSON formatting
-  - ![image](https://github.com/thwerks/NodeJS-Home-Assistant-Framework/assets/90361336/2739f2fe-97a5-430e-adb1-d6b73954f5e3)
-- Locations
-  - all available HA entities              http://10.0.0.1:200/ha
-  - last 500 websocket packets             http://10.0.0.1:200/ws
-  - all state/volatile memory              http://10.0.0.1:200/state
-  - see all the non-volatile               http://10.0.0.1:200/nv
-  - all the hard coded configs             http://10.0.0.1:200/cfg
-  - last 500 incoming telegram messages    http://10.0.0.1:200/tg
-  - last 500 log messages                  http://10.0.0.1:200/log
 # Getting Started
   - Install Home Assistant Core using the instructions https://github.com/thwerks/NodeJS-Home-Assistant-Framework/blob/main/install-ha-esphome.md
   - Generate API Token inside Home Assistant
@@ -41,10 +15,13 @@
     - ![image](https://github.com/thwerks/NodeJS-Home-Assistant-Framework/assets/90361336/331b8541-465c-4543-a588-28977b6ec8e5)
     - ![image](https://github.com/thwerks/NodeJS-Home-Assistant-Framework/assets/90361336/51cea2cf-9d71-4260-90e5-dfde7e8455ab)
   - take note of entities you want to use in NodeJS
+
+    
 # Home Assistant Input/Output Communication
 - there are multiple ways to read and write data between Home Assistant and this framework.
 - in some cases the features of multiple home assistant APIs (namely legacy homeassistant and websocket) are used in combination to produce a complete system.  
 - they have different uses so pay close attention.
+  
 ### Legacy `homeassistant` NodeJS API, `cfg.io.ha` array and `ha.fetch()` function
 - Fundamentals:
   - You will need enter all of the Home Assistant entities you will read or write into the `cfg.io.ha` string array.
@@ -84,6 +61,7 @@
         { state: value, attributes: { state_class: 'measurement', unit_of_measurement: unit } })
           .catch(err => console.error(err))
       ```
+      
   ### Websocket API
  - Fundamentals:
     - The websocket api implementation does not support querrying entity states, use the legacy API calls for that.
@@ -121,6 +99,33 @@
      - the `cfg.io.ha[0]` refers to whichever HA entity you want to subscribe to. Alternativly you could just put the entities name. 
      - This emiiter subscription should only be ran once the first time your Automatino Function Runs
      - The return statements are necessary to prevent further processing of you automation function until data is receive and precessed.  
+
+
+
   
+## Global Functions
+- Logger - `log("string", moduleID, severity)`  
+  - You need to add an entry in the module name list for your automation.
+  - <img src= "https://github.com/thwerks/NodeJS-Home-Assistant-Framework/assets/90361336/ece9e675-f46d-456a-b32c-1ad5b6871042" width="500">
+- Time stamp `sys.time.sync()`
+  - gets current time and returns a string `mm-dd hh:mm:ss.mil`
+- Write non-volatile memory to the disk `sys.file.write.nv()`
+  - If your automation function requires non-volatile memory, you must create an object in the `nv` object for your function and then call the `sys.file.write.nv()` function to initialize and save your data.
+  - Do something like: `if (nv.myFunction == undefined) nv.myFunction = {}` true then call `sys.file.write.nv();`
+- User Available Timer `user.timer` code block
+  - execute any function at any time you specify
+  - ![image](https://github.com/thwerks/NodeJS-Home-Assistant-Framework/assets/90361336/98dab905-7bfc-4c92-9fc0-792361a1feaa)
+ ## Diag Web Interface 
+- Look at all data in corrisponding memory space.
+  - use firefox for pretty JSON formatting
+  - ![image](https://github.com/thwerks/NodeJS-Home-Assistant-Framework/assets/90361336/2739f2fe-97a5-430e-adb1-d6b73954f5e3)
+- Locations
+  - all available HA entities              http://10.0.0.1:200/ha
+  - last 500 websocket packets             http://10.0.0.1:200/ws
+  - all state/volatile memory              http://10.0.0.1:200/state
+  - see all the non-volatile               http://10.0.0.1:200/nv
+  - all the hard coded configs             http://10.0.0.1:200/cfg
+  - last 500 incoming telegram messages    http://10.0.0.1:200/tg
+  - last 500 log messages                  http://10.0.0.1:200/log
 
      - talk about automation function processing as based on ws events
