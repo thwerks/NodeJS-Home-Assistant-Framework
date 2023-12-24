@@ -128,4 +128,6 @@
   - last 500 incoming telegram messages    http://10.0.0.1:200/tg
   - last 500 log messages                  http://10.0.0.1:200/log
 
-     - talk about automation function processing as based on ws events
+
+Notes:
+talk about automation function processing as based on ws events
