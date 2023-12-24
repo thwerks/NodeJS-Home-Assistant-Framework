@@ -19,7 +19,7 @@
 - Locations
   - all available HA entities              http://10.0.0.1:200/ha
   - last 500 websocket packets             http://10.0.0.1:200/ws
-  - all the volatile memory                http://10.0.0.1:200/state
+  - all state/volatile memory              http://10.0.0.1:200/state
   - see all the non-volatile               http://10.0.0.1:200/nv
   - all the hard coded configs             http://10.0.0.1:200/cfg
   - last 500 incoming telegram messages    http://10.0.0.1:200/tg
@@ -43,12 +43,57 @@
   - You will need enter all of the Home Assistant entities you will read or write into the `cfg.io.ha` string array.
   - This is used by the HA/NodeJS framework to indentify relevant entities and store their state.
   - All entities not in this list are ignored by the frameworks websocket and legacy APIs.
-  - The legacy homeassistant API has the advantage of querring the state of HA entities. This is useful for builing rebost automations that can recover from powerloss or network interruptions, etc. 
+  - The legacy homeassistant API has the advantage of querring the state of HA entities. This is useful for builing rebost automations that can recover from powerloss or network interruptions, etc.
+  - the legacy API also has a callback which is useful for error handeling and keeping track of HA response delays.
   - ![image](https://github.com/thwerks/NodeJS-Home-Assistant-Framework/assets/90361336/182aab5e-15d5-4ec5-b046-54798cd36b61)
-- Usage:
-  - `ha.fetch()` function:
+- Legacy API Usage:
+  - `ha.fetch()` function: (uses lagacy homeassistant API)
     - This function will querry the state of every entity you have configured and save it to the `state.ha.io` array
     - the state of your entity can be read from `state.ha.io[entityID]`.
-    - `ha.fetch()` is triggered on first startup, the Automated Function Array processing after first `ha.fetch()` completes.
+    - `ha.fetch()` is triggered on first startup, the Automated Function Array begins processing after first `ha.fetch()` completes.
     - `ha.fetch()` cannot be called repeately or it will create a race condition. 
-
+  - Legacy API Service Call
+    - `hass.services.call('turn_off', 'switch', { entity_id: "switch.testing_switch" });`
+    - or with callback
+    - ```
+       hass.services.call('turn_off', 'switch', { entity_id: "switch.testing_switch" })
+        .then(data => { myFunction(); })
+        .catch(err => console.error(err))
+      ```
+  - Legacy API State Query with Callback
+    - ```
+      hass.states.get('switch', nameOfEntity)
+        .then(data => { myFunction(); })
+        .catch(err => console.error(err))
+      ```
+  - Legacy API Home Assitant Meassurement/Sensor Entity
+    - The first time this service is called a sensor is automatically created in Home Assistant.
+    - `nameOfEntityYouWant` The name of the entity is of anything you want, helpful to add prefix like flow- or pressure-
+    - `unit` is anything you want like % or volts, psi, m3/hr, etc.
+    - `value` must be a float/number.
+    - can use a `.then` callback if you want.
+    - ```
+      hass.states.update('sensor', nameOfEntityYouWant,
+        { state: value, attributes: { state_class: 'measurement', unit_of_measurement: unit } })
+          .catch(err => console.error(err))
+      ```
+  ### Websocket API
+ - Fundamentals:
+    - The websocket api implementation does not support querrying entity states, use the legacy API calls for that.
+    - Entitys must be listed in the `cfg.io.ha` string array with correct name in home assistant or they will be ignored by websocket.
+    - Incoming Websocket `state_changed` events are written to the `state.ha.io` array immediately. The position each entity written in the array matches the position of the name in `cfg.io.ha`. So first entity will be written to `state.ha.io[0]`
+    - your automation function can periodically check the states of entities using the `state.ha.io` array or functions ca be trigger inside your automation function when state change events arrive by using emiters. 
+ - Websocket API Usage:
+    - Sending a `call_service` command to Home Assistan via websocket:
+      -  It preferable to use the legacy API to make service calls because it has a callback, is more compact and can supprt an error handeling scheme.
+      -    ```
+           em.emit('send', {
+              "id": state.ha.ws.id++,
+              "type": "call_service",
+              "domain": "switch",
+              "service": "turn_on",
+              "target": {
+              "entity_id": "switch.testing_switch"
+              }
+            })
+           ```
