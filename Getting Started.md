@@ -22,7 +22,7 @@
 - in some cases the features of multiple home assistant APIs (namely legacy homeassistant and websocket) are used in combination to produce a complete system.  
 - they have different uses so pay close attention.
   
-### Legacy `homeassistant` NodeJS API, `cfg.io.ha` array and `ha.fetch()` function
+### Legacy `homeassistant` API, `cfg.io.ha` array and `ha.fetch()` function
 - Fundamentals:
   - You will need enter all of the Home Assistant entities you will read or write into the `cfg.io.ha` string array.
   - This is used by the HA/NodeJS framework to identify relevant entities and store their state.
