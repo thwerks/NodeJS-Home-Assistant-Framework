@@ -1,7 +1,5 @@
 #### If you have a question, please just open a dialog in the “issue” section so others can benefit from the discussion. 
 
-#### I'm currently struggling with twocolors/esphome-native-api. Cannot get outgoing push messages to work, confusion about setState usage. If you know about this, please contribute here https://github.com/twocolors/esphome-native-api/issues/19 
-
 ## Preamble 
 
 I'll be blunt, Home Assistant isn't suitable for industrial applications or where malfunctions can lead to costly equipment damage. Furthermore, data manipulation and management is very cumbersome and difficult if its even possible at all. The state management for certain conditions like startup, power loss, errors and other likely conditions is difficult to understand and control in HA, its also very slow to react to inputs and has huge lag. Withstanding, HA has a very nice GUI and it works very well as a monitoring and control mechanism in the scheme of this framework. 
