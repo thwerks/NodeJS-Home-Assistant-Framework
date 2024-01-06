@@ -1,4 +1,4 @@
-#### If you have a question, please just open a dialog in the “issue” section so others can benefit from the discussion. 
+### This project has been superceeded by the ThinkWerks IoT Framework
 
 ## Preamble 
 
