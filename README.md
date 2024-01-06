@@ -1,4 +1,4 @@
-### This project has been superceeded by the ThinkWerks IoT Framework
+### This project has been superseded by the ThinkWerks IoT Framework
 
 ## Preamble 
 
